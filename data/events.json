@@ -1,0 +1,1374 @@
+[
+{
+  "id": "event_military_day1",
+  "type": "story",
+  "name": "军训 · 第一天",
+  "desc": "军训第一天，教官给了个下马威。站军姿站到腿软，但你知道这只是开始。",
+  "once": true,
+  "condition": "day == 1",
+  "options": null,
+  "autoEffects": [{ "str": 1 }],
+  "weight": 1000
+},
+{
+  "id": "event_military_day2",
+  "type": "story",
+  "name": "军训 · 第二天",
+  "desc": "全身酸痛，但还得继续。今天的训练是齐步走，你的步伐越来越整齐了。",
+  "once": true,
+  "condition": "day == 2",
+  "options": null,
+  "autoEffects": [{ "str": 1 }],
+  "weight": 1000
+},
+{
+  "id": "event_military_day3",
+  "type": "story",
+  "name": "军训 · 第三天",
+  "desc": "身体逐渐适应了训练强度。今天练习正步走，教官夸你有进步。",
+  "once": true,
+  "condition": "day == 3",
+  "options": null,
+  "autoEffects": [{ "str": 1 }],
+  "weight": 1000
+},
+{
+  "id": "event_military_day4",
+  "type": "story",
+  "name": "军训 · 第四天",
+  "desc": "今天教唱军歌，你扯着嗓子吼得最大声。虽然跑调了，但气势很足！",
+  "once": true,
+  "condition": "day == 4",
+  "options": null,
+  "autoEffects": [{ "str": 1 }],
+  "weight": 1000
+},
+{
+  "id": "event_military_day5",
+  "type": "story",
+  "name": "军训 · 第五天",
+  "desc": "军训最后一天，汇报演出圆满成功。和教官告别时，竟然有点舍不得。",
+  "once": true,
+  "condition": "day == 5",
+  "options": null,
+  "autoEffects": [{ "str": 1 }],
+  "weight": 1000
+},
+{
+  "id": "event_opening",
+  "type": "story",
+  "name": "开学典礼",
+  "desc": "校长在台上激情演讲，把上学期的内容又讲了一遍……你坐在下面昏昏欲睡。",
+  "once": true,
+  "condition": "day == 6",
+  "options": null,
+  "autoEffects": [],
+  "weight": 10000
+},
+{
+  "id": "event_canteen_fall",
+  "type": "story",
+  "name": "抢饭时摔了一跤",
+  "desc": "中午下课铃一响，你以百米冲刺的速度奔向食堂，结果在门口脚下一滑，摔了个四脚朝天……第二天，学校通报了这起'拥挤踩踏隐患事件'。",
+  "once": false,
+  "options": null,
+  "autoEffects": [{ "str": -2 }],
+  "weight": 8
+},
+{
+  "id": "event_shower_queue",
+  "type": "story",
+  "name": "抢不到洗澡位",
+  "desc": "放学后你冲向宿舍，却发现最后一个位置被前面的同学抢先一步占了。你只能闻着自己的汗味，心情低落……",
+  "once": false,
+  "options": null,
+  "condition": "day > 6",
+  "autoEffects": [
+    { "hap": -3 },
+    { "cha": -2 }
+  ],
+  "weight": 10
+},
+{
+  "id": "event_oath_mistake",
+  "type": "story",
+  "name": "宣誓口误",
+  "desc": "升旗仪式上，某人带领大家宣誓时太紧张，把'龙高人'说成了'龙高棱'……台下憋笑声一片，你也忍不住笑了。",
+  "once": false,
+  "condition": "day % 7 == 1 && day > 6",
+  "options": null,
+  "autoEffects": [
+    { "int": -1 },
+    { "hap": 2 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_homework_crisis",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你看着桌上堆积如山的作业，陷入了沉思……今晚肯定写不完了，你决定：",
+  "once": false,
+  "weight": 5,
+  "condition": "day > 6 && !hasTalent('talent_gentleman') && !hasTalent('talent_three_good')",
+  "options": [
+    {
+      "text": "抄作业",
+      "desc": "智力-5，快乐+5，5%概率被老师发现",
+      "effects": [
+        { "int": -5 },
+        { "hap": 5 }
+      ],
+      "chainEvent": {
+        "name": "抄作业被发现",
+        "desc": "老师火眼金睛，一眼就看出你的作业是抄的！被叫到办公室写了一晚上检讨……",
+        "probability": 0.05,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    },
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，有点丢脸……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -5 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪，心情跌到谷底。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_talent",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你突然意识到光顾着研究数学题，其他作业一个字没动！看着堆积如山的作业本，你陷入了深深的绝望……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_math_lover') && !hasTalent('talent_gentleman') && !hasTalent('talent_three_good')",
+  "weight": 10,
+  "options": [
+    {
+      "text": "抄作业",
+      "desc": "智力-5，快乐+5，5%概率被老师发现",
+      "effects": [
+        { "int": -5 },
+        { "hap": 5 }
+      ],
+      "chainEvent": {
+        "name": "抄作业被发现",
+        "desc": "老师火眼金睛，一眼就看出你的作业是抄的！被叫到办公室写了一晚上检讨……",
+        "probability": 0.05,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    },
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，但你觉得为了数学值得……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -3 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_2",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你看着桌上堆积如山的作业，陷入了沉思……今晚肯定写不完了，你决定：",
+  "once": false,
+  "weight": 5,
+  "condition": "day > 6 && hasTalent('talent_gentleman') && !hasTalent('talent_three_good')",
+  "options": [
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，有点丢脸……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -5 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪，心情跌到谷底。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_talent_2",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你突然意识到光顾着研究数学题，其他作业一个字没动！看着堆积如山的作业本，你陷入了深深的绝望……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_math_lover') && hasTalent('talent_gentleman') && !hasTalent('talent_three_good')",
+  "weight": 10,
+  "options": [
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，但你觉得为了数学值得……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -3 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_4",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你看着桌上堆积如山的作业，陷入了沉思……今晚肯定写不完了，你决定：",
+  "once": false,
+  "weight": 5,
+  "condition": "day > 6 && !hasTalent('talent_gentleman') && hasTalent('talent_three_good')",
+  "options": [
+    {
+      "text": "抄作业",
+      "desc": "智力-5，快乐+5，5%概率被老师发现",
+      "effects": [
+        { "int": -5 },
+        { "hap": 5 }
+      ],
+      "chainEvent": {
+        "name": "抄作业被发现",
+        "desc": "老师火眼金睛，一眼就看出你的作业是抄的！被叫到办公室写了一晚上检讨……",
+        "probability": 0.05,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    },
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，有点丢脸……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -5 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪，心情跌到谷底。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_talent_4",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你突然意识到光顾着研究数学题，其他作业一个字没动！看着堆积如山的作业本，你陷入了深深的绝望……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_math_lover') && !hasTalent('talent_gentleman') && hasTalent('talent_three_good')",
+  "weight": 10,
+  "options": [
+    {
+      "text": "抄作业",
+      "desc": "智力-5，快乐+5，5%概率被老师发现",
+      "effects": [
+        { "int": -5 },
+        { "hap": 5 }
+      ],
+      "chainEvent": {
+        "name": "抄作业被发现",
+        "desc": "老师火眼金睛，一眼就看出你的作业是抄的！被叫到办公室写了一晚上检讨……",
+        "probability": 0.05,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    },
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，但你觉得为了数学值得……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -3 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_3",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你看着桌上堆积如山的作业，陷入了沉思……今晚肯定写不完了，你决定：",
+  "once": false,
+  "weight": 5,
+  "condition": "day > 6 && hasTalent('talent_gentleman') && hasTalent('talent_three_good')",
+  "options": [
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，有点丢脸……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -5 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪，心情跌到谷底。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_homework_crisis_talent_3",
+  "type": "study",
+  "name": "作业写不完",
+  "desc": "晚自习快结束了，你突然意识到光顾着研究数学题，其他作业一个字没动！看着堆积如山的作业本，你陷入了深深的绝望……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_math_lover') && hasTalent('talent_gentleman') && hasTalent('talent_three_good')",
+  "weight": 10,
+  "options": [
+    {
+      "text": "写不完就写不完吧",
+      "desc": "无影响，第二天50%概率被老师骂",
+      "effects": [],
+      "chainEvent": {
+        "name": "被老师骂了",
+        "desc": "第二天老师当众批评了你没交作业，但你觉得为了数学值得……",
+        "probability": 0.5,
+        "options": null,
+        "autoEffects": [{ "hap": -3 }]
+      }
+    },
+    {
+      "text": "晚上熬夜写",
+      "desc": "智力+5，体质-5，3%概率被宿管抓",
+      "effects": [
+        { "int": 5 },
+        { "str": -5 }
+      ],
+      "chainEvent": {
+        "name": "被宿管抓到了",
+        "desc": "深夜，你的台灯微光被巡楼的宿管发现了……被记了一次违纪。",
+        "probability": 0.03,
+        "options": null,
+        "autoEffects": [{ "hap": -10 }]
+      }
+    }
+  ]
+},
+{
+  "id": "event_sports_meeting",
+  "type": "sports",
+  "name": "运动会",
+  "desc": "学校举办运动会，班主任正在征集报名。你打算参加吗？",
+  "once": true,
+  "condition": "day > 6",
+  "weight": 10,
+  "options": [
+    {
+      "text": "不参加",
+      "desc": "当个观众也挺好，无事发生",
+      "effects": []
+    },
+    {
+      "text": "参加跳绳比赛",
+      "desc": "体质+5，50%概率获奖",
+      "effects": [{ "str": 5 }],
+      "chainEvent": {
+        "name": "跳绳比赛",
+        "desc": "你参加了跳绳比赛……",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": 0.5,
+            "name": "获奖了！",
+            "desc": "你跳得又快又稳，拿到了名次！",
+            "effects": [{ "hap": 5 }],
+            "achievement": "won_award_in_sports_meet"
+          },
+          {
+            "probability": 0.5,
+            "name": "没获奖",
+            "desc": "竞争太激烈了，你没有拿到名次……",
+            "effects": [{ "hap": -5 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "参加跑步比赛",
+      "desc": "体质+7，20%概率获奖",
+      "effects": [{ "str": 7 }],
+      "chainEvent": {
+        "name": "跑步比赛",
+        "desc": "你站在起跑线上，心跳加速……",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": 0.2,
+            "name": "获奖了！",
+            "desc": "你奋力冲刺，成功站上了领奖台！",
+            "effects": [{ "hap": 5 }],
+            "achievement": "won_award_in_sports_meet"
+          },
+          {
+            "probability": 0.8,
+            "name": "没获奖",
+            "desc": "你已经尽力了，但对手实在太强……",
+            "effects": [{ "hap": -5 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "参加跳远比赛",
+      "desc": "体质+2，70%概率获奖",
+      "effects": [{ "str": 2 }],
+      "chainEvent": {
+        "name": "跳远比赛",
+        "desc": "你助跑、起跳……",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": 0.7,
+            "name": "获奖了！",
+            "desc": "你纵身一跃，跳出了个人最好成绩！",
+            "effects": [{ "hap": 5 }],
+            "achievement": "won_award_in_sports_meet"
+          },
+          {
+            "probability": 0.3,
+            "name": "没获奖",
+            "desc": "差一点点就能拿奖了，好可惜……",
+            "effects": [{ "hap": -5 }]
+          }
+        ]
+      }
+    }
+  ]
+},
+{
+  "id": "event_physics_teacher_volleyball",
+  "type": "sports",
+  "name": "物理老师打排球",
+  "desc": "体育课上，你们正在打排球。物理老师路过时被球砸中，不但没生气，反而笑着加入战局。球技居然还不错！",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "str": 2 },
+    { "hap": 5 }
+  ],
+  "weight": 1
+},
+{
+  "id": "event_volleyball_out",
+  "type": "sports",
+  "name": "排球飞出学校",
+  "desc": "你一记大力扣杀，排球直接飞过围墙，消失在校外……",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": 3 }
+  ],
+  "weight": 10
+},
+{
+  "id": "event_no_brush",
+  "type": "story",
+  "name": "没刷牙",
+  "desc": "你睡过头了。匆忙冲向教室，完全忘了刷牙这回事。一整天都不敢张嘴说话，总觉得有人在闻什么味道……",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "cha": -5 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_formation_run",
+  "type": "sports",
+  "name": "方阵跑",
+  "desc": "体育大课间，全校整齐列队进行方阵跑。一圈、两圈、三圈……你累得气喘吁吁，腿像灌了铅一样。虽然锻炼了身体，但真的好痛苦啊！",
+  "once": false,
+  "condition": "day > 6 && day % 7 == 2",
+  "options": null,
+  "autoEffects": [
+    { "str": 2 },
+    { "hap": -2 }
+  ],
+  "weight": 10
+},
+{
+  "id": "event_opposite_sex_glance",
+  "type": "love",
+  "name": "有人在看你",
+  "desc": "上课时你无意间转头，发现隔壁组的异性同学正偷偷看你。四目相对的瞬间，对方慌忙移开视线，你的心跳漏了一拍……这堂课注定没法专心了。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 },
+    { "cha": 2 },
+    { "int": -2 }
+  ],
+  "weight": 3
+},
+{
+  "id": "event_noon_training",
+  "type": "study",
+  "name": "中午午训",
+  "desc": "中午吃完饭，你去机房集训。你对着电脑刷了一道又一道算法题，虽然累但收获满满。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_competitive_programming')",
+  "options": null,
+  "autoEffects": [
+    { "int": 3 },
+    { "str": -1 },
+    { "hap": 2 }
+  ],
+  "weight": 15
+},
+{
+  "id": "event_opposite_sex_glance_talent",
+  "type": "love",
+  "name": "有人在看你",
+  "desc": "上课时你无意间转头，发现隔壁组的异性同学正偷偷看你。四目相对的瞬间，对方慌忙移开视线，你的心跳漏了一拍……这堂课注定没法专心了。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_love_master')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 },
+    { "cha": 2 },
+    { "int": -2 }
+  ],
+  "weight": 1.5
+},
+{
+  "id": "event_phone_queue_fail",
+  "type": "story",
+  "name": "抢电话机失败",
+  "desc": "下课铃一响，你以百米冲刺的速度奔向电话机，却发现前面已经排了好几个人。好不容易轮到你，刚拿起听筒……上课铃响了。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": -2 }
+  ],
+  "weight": 20
+},
+{
+  "id": "event_canteen_delicious",
+  "type": "story",
+  "name": "食堂饭很好吃",
+  "desc": "今天食堂师傅超常发挥！红烧肉肥而不腻，青菜也炒得恰到好处。你忍不住多添了一碗饭，吃得心满意足。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "str": 2 },
+    { "hap": 5 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_computer_class_cancelled",
+  "type": "study",
+  "name": "信息课被冲掉",
+  "desc": "期待一周的信息课，结果数学老师抱着一摞卷子走进来：'你们信息老师今天有事，这节课我来上。' 唉，虽然能多学点知识，但好想摸电脑啊……",
+  "once": false,
+  "condition": "day > 6 && day % 7 == 3",
+  "options": null,
+  "autoEffects": [
+    { "hap": -2 },
+    { "int": 2 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_sunset_singing",
+  "type": "social",
+  "name": "落日歌友会",
+  "desc": "傍晚时分，几个同学抱着吉他在操场边开起了小型歌友会。夕阳、歌声、微风……你坐在草地上静静听着，一周的疲惫都被治愈了。",
+  "once": false,
+  "condition": "day > 6 && day % 7 == 4 && !hasTalent('talent_singing')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 }
+  ],
+  "weight": 15
+},
+{
+  "id": "event_sunset_singing_talent",
+  "type": "social",
+  "name": "落日歌友会",
+  "desc": "歌友会上，你被大家起哄推上去唱了一首。没想到你一开口就惊艳全场，连路过的老师都驻足鼓掌。夕阳下，你成了今晚最闪亮的那颗星！",
+  "once": false,
+  "condition": "day > 6 && day % 7 == 4 && hasTalent('talent_singing')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 5 }
+  ],
+  "weight": 15
+},
+{
+  "id": "event_weekend_homework",
+  "type": "study",
+  "name": "周末作业超级多",
+  "desc": "周末到了，但各科老师像是商量好了一样，作业布置得堆积如山。你埋头苦干，虽然学到了不少，但美好的周末就这么泡汤了……",
+  "once": false,
+  "condition": "day > 6 && (day % 7 >= 5 || day % 7 <= 1)",
+  "options": null,
+  "autoEffects": [
+    { "int": 5 },
+    { "hap": -2 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_chat_with_crush",
+  "type": "love",
+  "name": "和喜欢的异性聊天",
+  "desc": "你鼓起勇气和Ta聊了几句，没想到Ta回应得很热情。你们从作业聊到兴趣爱好，时间过得飞快。心里像吃了蜜一样甜，整个人都容光焕发！",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": 10 },
+    { "cha": 6 }
+  ],
+  "weight": 4
+},
+{
+  "id": "event_chat_with_crush_talent",
+  "type": "love",
+  "name": "和喜欢的异性聊天",
+  "desc": "你鼓起勇气和Ta聊了几句，没想到Ta回应得很热情。你们从作业聊到兴趣爱好，时间过得飞快。心里像吃了蜜一样甜，整个人都容光焕发！",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_love_master')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 10 },
+    { "cha": 6 }
+  ],
+  "weight": 2
+},
+{
+  "id": "event_listening_test",
+  "type": "study",
+  "name": "听说考试",
+  "desc": "今天进行英语听说考试，你戴着耳机认真作答。虽然有点紧张，但整体发挥还不错，感觉听力水平又提升了一点。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "int": 5 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_perfume_incident",
+  "type": "story",
+  "name": "香水风波",
+  "desc": "班上某位同学偷偷把家里的香水带到学校，被好奇的同学拿去传着玩，结果不小心洒了一地。整个教室弥漫着浓郁的香气，有人觉得好闻，有人被熏得开窗，场面一度十分欢乐。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": 4 }
+  ],
+  "weight": 7
+},
+{
+  "id": "event_toilet_clogged",
+  "type": "story",
+  "name": "厕所堵了",
+  "desc": "你吃完苹果随手把核丢进厕所冲走，结果它卡在了管道里……水漫金山，宿管阿姨闻讯赶来，铁青着脸让你自己用手掏出来。这是你人生中最漫长的十分钟。",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": -5 }
+  ],
+  "weight": 4
+},
+{
+  "id": "event_1000m_run",
+  "type": "sports",
+  "name": "1000米测试",
+  "desc": "体育课上进行1000米测试，你在跑道上挥汗如雨，拼尽全力冲过终点。虽然累得要死，但体质确实得到了锻炼。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_sickly')",
+  "options": null,
+  "autoEffects": [
+    { "str": 2 },
+    { "hap": -2 }
+  ],
+  "weight": 6
+},
+{
+  "id": "event_discipline_violation",
+  "type": "story",
+  "name": "违纪扣分",
+  "desc": "今天值日老师突击检查，你的头发长度/指甲/校服不符合规范，被记了违纪，扣了班级分。同学们看你的眼神带着埋怨，你低着头恨不得找个地缝钻进去。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -5 },
+    { "cha": -2 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_discipline_violation_ignored",
+  "type": "story",
+  "name": "违纪扣分",
+  "desc": "值日老师突击检查，给你记了违纪。但你完全不放在心上——校规算什么？扣分就扣分呗，你潇洒地耸耸肩，转头就和朋友谈笑风生去了。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 5
+},
+{
+  "id": "event_sick",
+  "type": "story",
+  "name": "生病了",
+  "desc": "换季时节，你不小心中招了。头疼、流鼻涕、浑身无力……去医务室躺了一下午，落下的课还得自己补。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_strong_immune')",
+  "options": null,
+  "autoEffects": [
+    { "str": -2 },
+    { "hap": -2 }
+  ],
+  "weight": 6
+},
+{
+  "id": "event_sick_avoided",
+  "type": "story",
+  "name": "差点生病",
+  "desc": "换季时节，周围同学纷纷中招。你感觉喉咙有点不舒服，但喝了杯热水、睡了一觉，第二天居然没事了。这体质，真是羡慕死人。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_strong_immune')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 6
+},
+{
+  "id": "event_teacher_milk_tea",
+  "type": "story",
+  "name": "老师的奶茶",
+  "desc": "你帮老师搬了一摞作业到办公室，老师笑着从抽屉里拿出一杯奶茶递给你：'辛苦了，这个给你喝。' 你接过奶茶，心里暖暖的。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_no_reward') && !hasTalent('talent_gentleman')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_teacher_milk_tea_refused",
+  "type": "story",
+  "name": "拒绝奶茶",
+  "desc": "你帮老师搬完作业，老师递来一杯奶茶作为感谢。你摆摆手，义正言辞地说：'老师，这是我应该做的，不用奖励！' 老师愣了一下，欣慰地点点头。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_no_reward') && !hasTalent('talent_disgentleman')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 5
+},
+{
+  "id": "event_teacher_chocolate",
+  "type": "story",
+  "name": "老师的巧克力",
+  "desc": "你帮老师整理完资料，老师从抽屉里拿出一盒巧克力，递给你几颗：'尝尝，朋友从国外带回来的。' 你剥开一颗放进嘴里，甜到心里。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_no_reward') && !hasTalent('talent_gentleman')",
+  "options": null,
+  "autoEffects": [{ "hap": 4 }],
+  "weight": 4
+},
+{
+  "id": "event_teacher_chocolate_refused",
+  "type": "story",
+  "name": "拒绝巧克力",
+  "desc": "老师递给你几颗进口巧克力，你摇摇头：'老师，我最近在戒糖，而且帮您是应该的。' 老师笑着把巧克力收了回去，对你刮目相看。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_no_reward') && !hasTalent('talent_disgentleman')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 4
+},
+{
+  "id": "event_teacher_fruit",
+  "type": "story",
+  "name": "老师请吃水果",
+  "desc": "你帮老师打扫完实验室，老师洗了一盘葡萄递给你：'辛苦了，吃点水果。' 葡萄又大又甜，你的疲惫一扫而空。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_no_reward') && !hasTalent('talent_gentleman')",
+  "options": null,
+  "autoEffects": [{ "hap": 3 }, { "str": 1 }],
+  "weight": 4
+},
+{
+  "id": "event_teacher_fruit_refused",
+  "type": "story",
+  "name": "拒绝水果",
+  "desc": "老师端来一盘洗好的葡萄，你摆摆手：'老师您吃吧，我帮您是自愿的。' 老师笑了笑，觉得你真是个有原则的好学生。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_no_reward') && !hasTalent('talent_disgentleman')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 4
+},
+{
+  "id": "event_bad_manners",
+  "type": "social",
+  "name": "反家教",
+  "desc": "",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_natural_manners')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 }
+  ],
+  "weight": 10
+},
+{
+  "id": "event_bad_manners_talent",
+  "type": "social",
+  "name": "反家教",
+  "desc": "",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_natural_manners')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 }
+  ],
+  "weight": 6
+},
+{
+  "id": "event_moon_watching",
+  "type": "love",
+  "name": "被同学叫去看月亮",
+  "desc": "你猜……",
+  "once": true,
+  "condition": "day > 6 && !hasTalent('talent_born_for_each_other')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 3 }
+  ],
+  "weight": 0.1,
+  "achievement": "a_moon_cake"
+},
+{
+  "id": "event_moon_watching_talent_2",
+  "type": "love",
+  "name": "被同学叫去看月亮",
+  "desc": "你猜……",
+  "once": true,
+  "condition": "day > 6 && !hasTalent('talent_love_master')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 3 }
+  ],
+  "weight": 0.05,
+  "achievement": "a_moon_cake"
+},
+{
+  "id": "event_moon_watching_talent",
+  "type": "love",
+  "name": "被同学叫去看月亮",
+  "desc": "你猜……",
+  "once": true,
+  "condition": "day > 6 && hasTalent('talent_born_for_each_other')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 3 }
+  ],
+  "weight": 0.1,
+  "achievement": "a_moon_cake"
+},
+{
+  "id": "event_rooftop_farming",
+  "type": "story",
+  "name": "天台种菜",
+  "desc": "学校天台有一片小菜园，今天轮到你们班去劳动。顶着大太阳浇水、除草、松土……感觉自己像个免费劳动力。虽然身体得到了锻炼，但真的好累啊。",
+  "once": false,
+  "condition": "day > 6 && day % 7 == 3",
+  "options": null,
+  "autoEffects": [
+    { "hap": -2 },
+    { "str": 2 }
+  ],
+  "weight": 5
+},
+{
+  "id": "event_class_cadre_election",
+  "type": "social",
+  "name": "班干部竞选",
+  "desc": "新学期班干部竞选开始了。班主任在讲台上询问谁有意愿，你陷入了沉思……要不要试试呢？",
+  "once": true,
+  "condition": "day > 6",
+  "weight": 10,
+  "options": [
+    {
+      "text": "竞选班长",
+      "desc": "10%概率当选，有领导天赋提升到15%",
+      "effects": [],
+      "chainEvent": {
+        "name": "班长竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.15 : 0.1",
+            "name": "当选班长！",
+            "desc": "你的演讲打动了大家，成功当选班长！",
+            "effects": [
+              { "int": 5 },
+              { "cha": 7 }
+            ],
+            "achievement": "a_class_leader"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.85 : 0.9",
+            "name": "落选了",
+            "desc": "竞争太激烈了，你没有当选……",
+            "effects": []
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选纪委",
+      "desc": "20%概率当选，有领导天赋提升到30%",
+      "effects": [],
+      "chainEvent": {
+        "name": "纪委竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.3 : 0.2",
+            "name": "当选纪委！",
+            "desc": "你正直的形象获得了认可，成功当选纪律委员！",
+            "effects": [
+              { "int": 5 },
+              { "cha": 7 }
+            ],
+            "achievement": "a_class_leader"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.7 : 0.8",
+            "name": "落选了",
+            "desc": "可惜，差了几票……",
+            "effects": []
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选学委",
+      "desc": "30%概率当选，有领导天赋提升到45%",
+      "effects": [],
+      "chainEvent": {
+        "name": "学委竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.45 : 0.3",
+            "name": "当选学委！",
+            "desc": "你的学习成绩和责任心得到了认可，成功当选学习委员！",
+            "effects": [
+              { "int": 5 },
+              { "cha": 7 }
+            ],
+            "achievement": "a_class_leader"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.55 : 0.7",
+            "name": "落选了",
+            "desc": "你表现不错，但有人票数更高……",
+            "effects": []
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选其他职位",
+      "desc": "40%概率当选，有领导天赋提升到60%",
+      "effects": [],
+      "chainEvent": {
+        "name": "其他职位竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.6 : 0.4",
+            "name": "当选了！",
+            "desc": "你成功当选了一个班干部职位！",
+            "effects": [
+              { "int": 5 },
+              { "cha": 7 }
+            ],
+            "achievement": "a_class_leader"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.4 : 0.6",
+            "name": "落选了",
+            "desc": "尝试了一下，但没有成功……",
+            "effects": []
+          }
+        ]
+      }
+    },
+    {
+      "text": "不参加竞选",
+      "desc": "当个普通学生也挺好",
+      "effects": []
+    }
+  ]
+},
+{
+  "id": "event_student_union_election",
+  "type": "social",
+  "name": "学生会竞选",
+  "desc": "学生会开始招新了！各大部门都在宣传，你决定去试试哪个部门呢？",
+  "once": true,
+  "condition": "day > 20 && day < 50",
+  "weight": 200000,
+  "options": [
+    {
+      "text": "竞选宣传部",
+      "desc": "80%概率当选，有领导天赋提升到100%",
+      "effects": [],
+      "chainEvent": {
+        "name": "宣传部竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 1.0 : 0.8",
+            "name": "成功入选宣传部！",
+            "desc": "你的创意和表达能力打动了面试官，成功加入学生会宣传部！",
+            "effects": [
+              { "int": 3 },
+              { "cha": 5 },
+              { "hap": 4 }
+            ],
+            "achievement": "a_school_cadre"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.0 : 0.2",
+            "name": "落选了",
+            "desc": "竞争太激烈了，你没有通过面试……",
+            "effects": [{ "hap": -2 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选文娱部",
+      "desc": "80%概率当选，有领导天赋提升到100%",
+      "effects": [],
+      "chainEvent": {
+        "name": "文娱部竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 1.0 : 0.8",
+            "name": "成功入选文娱部！",
+            "desc": "你的才艺和组织能力获得了认可，成功加入学生会文娱部！",
+            "effects": [
+              { "cha": 6 },
+              { "hap": 5 }
+            ],
+            "achievement": "a_school_cadre"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.0 : 0.2",
+            "name": "落选了",
+            "desc": "虽然你表现不错，但还是差了一点……",
+            "effects": [{ "hap": -2 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选权益部",
+      "desc": "80%概率当选，有领导天赋提升到100%",
+      "effects": [],
+      "chainEvent": {
+        "name": "权益部竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 1.0 : 0.8",
+            "name": "成功入选权益部！",
+            "desc": "你为学生发声的热情打动了面试官，成功加入学生会权益部！",
+            "effects": [
+              { "int": 4 },
+              { "str": 3 },
+              { "hap": 3 }
+            ],
+            "achievement": "a_school_cadre"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.0 : 0.2",
+            "name": "落选了",
+            "desc": "面试官觉得你还需要再锻炼一下……",
+            "effects": [{ "hap": -2 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "竞选学研部",
+      "desc": "80%概率当选，有领导天赋提升到100%",
+      "effects": [],
+      "chainEvent": {
+        "name": "学研部竞选结果",
+        "probability": 1,
+        "options": null,
+        "outcomes": [
+          {
+            "probability": "hasTalent('talent_leadership') ? 1.0 : 0.8",
+            "name": "成功入选学研部！",
+            "desc": "你的学术能力和钻研精神获得了认可，成功加入学生会学研部！",
+            "effects": [
+              { "int": 6 },
+              { "hap": 3 }
+            ],
+            "achievement": "a_school_cadre"
+          },
+          {
+            "probability": "hasTalent('talent_leadership') ? 0.0 : 0.2",
+            "name": "落选了",
+            "desc": "你的知识储备还不够，没能通过笔试……",
+            "effects": [{ "int": 2 }, { "hap": -2 }]
+          }
+        ]
+      }
+    },
+    {
+      "text": "不参加竞选",
+      "desc": "专注于学习也挺好",
+      "effects": []
+    }
+  ]
+},
+{
+  "id": "event_tang_mock",
+  "type": "social",
+  "name": "被同学说TANG",
+  "desc": "不知道从什么时候开始，班上流行起了一个梗……同学们看到你就笑着说'你好TANG啊'。虽然不太明白什么意思，但感觉不是什么好话。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('tang')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -3 },
+    { "cha": -2 }
+  ],
+  "weight": 4
+},
+{
+  "id": "event_tang_mock_talent",
+  "type": "social",
+  "name": "被同学说TANG",
+  "desc": "班上流行起了一个梗，同学们看到你就笑：'哈哈哈哈你好像那个……TANG！' 你翻了个白眼——又是这个梗，习惯了，随便吧。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('tang')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -1 }
+  ],
+  "weight": 6
+},
+{
+  "id": "event_longgao_star",
+  "type": "story",
+  "name": "龙高之星",
+  "desc": "经过全校师生投票评选，你荣获本学期'龙高之星'称号！在升旗仪式上，校长亲自为你颁发奖状，台下掌声雷动。",
+  "once": true,
+  "condition": "day > 30 && int > 100 && !hasTalent('talent_three_good')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 2 }
+  ],
+  "achievement": "a_longgao_star",
+  "weight": 5
+},
+{
+  "id": "event_longgao_star_talent",
+  "type": "story",
+  "name": "龙高之星",
+  "desc": "经过全校师生投票评选，你以高票荣获本学期'龙高之星'称号！作为三好学生的你，实至名归。在升旗仪式上，校长亲自颁奖，同学们投来羡慕的目光。",
+  "once": true,
+  "condition": "day > 30 && int > 100 && hasTalent('talent_three_good')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 2 }
+  ],
+  "achievement": "a_longgao_star",
+  "weight": 8
+},
+{
+  "id": "event_study_model",
+  "type": "study",
+  "name": "学习标兵",
+  "desc": "期中考试成绩公布，你以年级前50名的优异成绩被评为'学习标兵'！在年级大会上，你作为优秀学生代表上台领奖。",
+  "once": true,
+  "condition": "day > 20 && int > 120 && !hasTalent('talent_three_good')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 2 }
+  ],
+  "achievement": "a_study_model",
+  "weight": 5
+},
+{
+  "id": "event_study_model_talent",
+  "type": "study",
+  "name": "学习标兵",
+  "desc": "期中考试成绩公布，你不仅名列年级前50，还因为三好学生的优秀表现额外获得表彰！在年级大会上，你收获了双份的掌声。",
+  "once": true,
+  "condition": "day > 20 && int > 120 && hasTalent('talent_three_good')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 5 },
+    { "cha": 2 }
+  ],
+  "achievement": "a_study_model",
+  "weight": 8
+}
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "a_moon_cake",
+    "name": "幸福月饼",
+    "desc": "和特别的人一起看月亮，幸福得像吃了月饼一样甜。",
+    "condition": "false"
+  },
+  {
+    "id": "a_class_leader",
+    "name": "班干部",
+    "desc": "成功当选班干部，获得同学们的认可和尊重。",
+    "condition": "false"
+  },
+  {
+    "id": "won_award_in_sports_meet",
+    "name": "运动会获奖",
+    "desc": "在运动会上获得奖项，展现了自己的实力。",
+    "condition": "false"
+  },
+  {
+    "id": "a_school_cadre",
+    "name": "校级干部",
+    "desc": "成功加入学生会，成为校级学生干部。",
+    "condition": "false"
+  },
+  {
+    "id": "fan_jia_jiao",
+    "name": "反家教达人",
+    "desc": "单次游戏反家教次数达到5次",
+    "condition": "fanjiajao >= 5"
+  },
+  {
+    "id": "a_love_brain",
+    "name": "恋爱脑",
+    "desc": "单次游玩你经历了15次以上恋爱事件，已经彻底变成了恋爱脑。",
+    "condition": "_loveCount >= 15"
+  },
+  {
+      "id": "a_longgao_star",
+      "name": "龙高之星",
+      "desc": "荣获龙高之星称号，成为全校瞩目的明星学生。"
+  },
+  {
+      "id": "a_study_model",
+      "name": "学习标兵",
+      "desc": "成绩优异，被评为学习标兵。"
+  }
+]

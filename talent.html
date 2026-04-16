@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>龙高 · 天赋抽选</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0d1530 100%);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 星空背景简化版 */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部标题 */
+        .header {
+            text-align: center;
+            padding: 20px 0 10px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 8px;
+            background: linear-gradient(135deg, #f5e6d3, #c9e4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(100, 180, 255, 0.3);
+        }
+
+        .header p {
+            color: #8aa0c0;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            margin-top: 8px;
+        }
+
+        /* 属性面板 */
+        .stats-panel {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8aa0c0;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: rgba(20, 40, 70, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            color: #e0ecff;
+        }
+
+        /* 天赋网格 */
+        .talents-section {
+            flex: 1;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #c0d4f0;
+            letter-spacing: 2px;
+        }
+
+        .talents-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* 天赋卡片 */
+        .talent-card {
+            background: rgba(15, 30, 55, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid;
+            border-radius: 20px;
+            padding: 18px 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .talent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .talent-card:hover::before {
+            opacity: 1;
+        }
+
+        .talent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .talent-card.selected {
+            box-shadow: 0 0 0 6px rgba(255, 215, 100, 0.6), 0 10px 25px rgba(0,0,0,0.5);
+            transform: scale(1.02);
+        }
+
+        /* 天赋品质边框颜色 */
+        .talent-card.quality-legendary { border-color: #c084fc; }      /* 紫色 - 传说 */
+        .talent-card.quality-epic { border-color: #f87171; }           /* 红色 - 史诗 */
+        .talent-card.quality-rare { border-color: #fb923c; }           /* 橙色 - 稀有 */
+        .talent-card.quality-common { border-color: #60a5fa; }         /* 蓝色 - 普通 */
+
+        .talent-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .quality-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .talent-desc {
+            font-size: 0.8rem;
+            color: #b8cce8;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .talent-effects {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #a0b8d8;
+        }
+
+        /* 底部操作栏 */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px 0 30px;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: rgba(30, 50, 90, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1.5px solid rgba(180, 210, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3a5f8f, #2a4570);
+            border-color: rgba(200, 220, 255, 0.5);
+            box-shadow: 0 0 20px rgba(70, 130, 200, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: rgba(50, 80, 130, 0.8);
+            border-color: rgba(220, 240, 255, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .selected-count {
+            color: #ffd966;
+            font-size: 1.1rem;
+            margin-left: 10px;
+        }
+
+        /* 动画 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .talent-card {
+            animation: cardAppear 0.4s ease-out;
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .talents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .talents-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-panel {
+                gap: 15px;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+                padding: 5px 12px;
+            }
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            padding: 10px 20px;
+            background: rgba(20, 40, 70, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 40px;
+            color: #c0d8ff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(60, 100, 160, 0.5);
+            transform: translateX(-3px);
+        }
+
+        /* 属性分配面板 */
+        .attr-panel {
+            background: rgba(15, 30, 55, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 24px;
+            padding: 25px 30px;
+            margin: 20px 0 30px;
+        }
+
+        .attr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .attr-header h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #c0d4f0;
+            letter-spacing: 2px;
+        }
+
+        .remain-points {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffd966;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 215, 100, 0.3);
+        }
+
+        .attr-sliders {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .attr-item {
+            text-align: center;
+        }
+
+        .attr-label {
+            font-size: 1rem;
+            color: #a0b8d8;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .attr-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e0ecff;
+            margin-bottom: 10px;
+        }
+
+        .attr-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .attr-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(60, 100, 160, 0.4);
+            border: 1.5px solid rgba(180, 210, 255, 0.3);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .attr-btn:hover {
+            background: rgba(100, 160, 240, 0.6);
+            border-color: rgba(220, 240, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .attr-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .attr-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(100, 150, 200, 0.3);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .attr-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #80b0ff;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(100, 180, 255, 0.5);
+        }
+
+        .reset-btn {
+            padding: 8px 20px;
+            background: rgba(100, 100, 150, 0.3);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 30px;
+            color: #c0d8ff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: rgba(120, 140, 180, 0.5);
+        }
+
+        /* 分隔线 */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(180, 210, 255, 0.3), transparent);
+            margin: 30px 0 10px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 800px) {
+            .attr-sliders {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .attr-sliders {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <!-- 返回主页 -->
+    <div class="back-btn" onclick="goBack()">← 返回首页</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>天赋抽选</h1>
+            <p>选择 3 个天赋开始你的龙高生涯</p>
+        </div>
+        <div class="stats-panel">
+    <div class="stat-item">
+        <div class="stat-label">智力</div>
+        <div class="stat-value" id="stat-int">50</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">体质</div>
+        <div class="stat-value" id="stat-str">50</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">快乐</div>
+        <div class="stat-value" id="stat-hap">50</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">颜值</div>
+        <div class="stat-value" id="stat-cha">50</div>
+    </div>
+</div>
+        <!-- 属性自选面板 -->
+        <div class="attr-panel">
+            <div class="attr-header">
+                <h3>📊 分配属性点</h3>
+                <div class="remain-points">剩余: <span id="remainPoints">100</span></div>
+            </div>
+            <div class="attr-sliders">
+                <div class="attr-item">
+                    <div class="attr-label">🧠 智力</div>
+                    <div class="attr-value" id="attr-int">50</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" data-stat="int" data-delta="-5">−</button>
+                        <input type="range" class="attr-slider" id="slider-int" min="0" max="100" value="50" step="5">
+                        <button class="attr-btn" data-stat="int" data-delta="5">+</button>
+                    </div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-label">💪 体质</div>
+                    <div class="attr-value" id="attr-str">50</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" data-stat="str" data-delta="-5">−</button>
+                        <input type="range" class="attr-slider" id="slider-str" min="0" max="100" value="50" step="5">
+                        <button class="attr-btn" data-stat="str" data-delta="5">+</button>
+                    </div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-label">😊 快乐</div>
+                    <div class="attr-value" id="attr-hap">50</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" data-stat="hap" data-delta="-5">−</button>
+                        <input type="range" class="attr-slider" id="slider-hap" min="0" max="100" value="50" step="5">
+                        <button class="attr-btn" data-stat="hap" data-delta="5">+</button>
+                    </div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-label">✨ 颜值</div>
+                    <div class="attr-value" id="attr-cha">50</div>
+                    <div class="attr-controls">
+                        <button class="attr-btn" data-stat="cha" data-delta="-5">−</button>
+                        <input type="range" class="attr-slider" id="slider-cha" min="0" max="100" value="50" step="5">
+                        <button class="attr-btn" data-stat="cha" data-delta="5">+</button>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                <button class="reset-btn" id="resetAttrBtn">⟲ 重置属性</button>
+            </div>
+        </div>
+
+<div class="divider"></div>
+        <!-- 天赋展示区 -->
+        <div class="talents-section">
+            <div class="section-title">
+                <h2>可选天赋 <span class="selected-count" id="selectedCount">(0/3)</span></h2>
+                <button class="btn" id="rerollBtn" style="padding: 10px 30px; font-size: 1rem;">🔄 重新抽选</button>
+            </div>
+            <div class="talents-grid" id="talentsGrid"></div>
+        </div>
+
+        <!-- 底部操作 -->
+        <div class="action-bar">
+            <button class="btn btn-primary" id="confirmBtn" disabled>确认选择</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 天赋数据定义 ====================
+        let TALENTS_DATABASE = [];
+        let QUALITY_CONFIG = {};
+
+        // 加载天赋数据
+        async function loadTalentsData() {
+            try {
+                const response = await fetch('./data/talents.json');
+                const data = await response.json();
+                TALENTS_DATABASE = data.talents;
+                QUALITY_CONFIG = data.qualities;
+                
+                // 数据加载完成后初始化页面
+                init();
+            } catch (error) {
+                console.error('加载天赋数据失败:', error);
+                // 使用备用数据
+                useFallbackData();
+                init();
+            }
+        }
+
+        function useFallbackData() {
+            QUALITY_CONFIG = {
+                legendary: { name: '传说', color: '#c084fc', weight: 1 },
+                epic: { name: '史诗', color: '#f87171', weight: 3 },
+                rare: { name: '稀有', color: '#fb923c', weight: 6 },
+                common: { name: '普通', color: '#60a5fa', weight: 10 }
+            };
+
+            TALENTS_DATABASE = [
+                {
+                    id: 'talent_001',
+                    name: '学霸',
+                    desc: '初始智力+10，学习效果×1.2',
+                    quality: 'legendary',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'int', value: 10 },
+                            { trigger: 'study', action: 'multiply', target: 'int', value: 1.2 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_002',
+                    name: '健身狂人',
+                    desc: '初始体质+15，学习体质效果×1.3',
+                    quality: 'epic',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'str', value: 15 },
+                            { trigger: 'study', action: 'multiply', target: 'str', value: 1.3 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_003',
+                    name: '社交达人',
+                    desc: '初始颜值+8，恋爱时颜值+5',
+                    quality: 'rare',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'cha', value: 8 },
+                            { trigger: 'love', action: 'add', target: 'cha', value: 5 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_004',
+                    name: '乐观主义者',
+                    desc: '初始快乐+12，恋爱时快乐+7，学习时快乐-5',
+                    quality: 'common',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'hap', value: 12 },
+                            { trigger: 'love', action: 'add', target: 'hap', value: 7 },
+                            { trigger: 'study', action: 'subtract', target: 'hap', value: 5 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_005',
+                    name: '天选之子',
+                    desc: '全属性+5，学习效果×1.1',
+                    quality: 'legendary',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'int', value: 5 },
+                            { trigger: 'start', action: 'add', target: 'str', value: 5 },
+                            { trigger: 'start', action: 'add', target: 'hap', value: 5 },
+                            { trigger: 'start', action: 'add', target: 'cha', value: 5 },
+                            { trigger: 'study', action: 'multiply', target: 'int', value: 1.1 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_006',
+                    name: '书呆子',
+                    desc: '初始智力+8，体质-3，快乐-3',
+                    quality: 'common',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'int', value: 8 },
+                            { trigger: 'start', action: 'subtract', target: 'str', value: 3 },
+                            { trigger: 'start', action: 'subtract', target: 'hap', value: 3 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_007',
+                    name: '运动健将',
+                    desc: '初始体质+12，运动效果×1.3',
+                    quality: 'epic',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'str', value: 12 },
+                            { trigger: 'sports', action: 'multiply', target: 'str', value: 1.3 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_008',
+                    name: '开心果',
+                    desc: '初始快乐+10，社交时快乐+5',
+                    quality: 'rare',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'hap', value: 10 },
+                            { trigger: 'social', action: 'add', target: 'hap', value: 5 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_009',
+                    name: '颜值担当',
+                    desc: '初始颜值+10，社交效果×1.2',
+                    quality: 'rare',
+                    effects: {
+                        rules: [
+                            { trigger: 'start', action: 'add', target: 'cha', value: 10 },
+                            { trigger: 'social', action: 'multiply', target: 'cha', value: 1.2 }
+                        ]
+                    }
+                },
+                {
+                    id: 'talent_010',
+                    name: '恋爱脑',
+                    desc: '恋爱时快乐+10，智力-5',
+                    quality: 'common',
+                    effects: {
+                        rules: [
+                            { trigger: 'love', action: 'add', target: 'hap', value: 10 },
+                            { trigger: 'love', action: 'subtract', target: 'int', value: 5 }
+                        ]
+                    }
+                }
+            ];
+        }
+
+        // ==================== 游戏状态 ====================
+        let currentTalents = [];
+        let selectedTalents = [];
+        let baseStats = {
+            int: 50,
+            str: 50,
+            hap: 50,
+            cha: 50
+        };
+        let totalPoints = 200;
+        const MIN_STAT = 0;
+        const MAX_STAT = 100;
+        const STEP = 5;
+
+        // ==================== 规则引擎 ====================
+        class RuleEngine {
+            static calculateStartStats(talents) {
+                const stats = { int: 0, str: 0, hap: 0, cha: 0 };
+                
+                talents.forEach(talent => {
+                    if (!talent.effects || !talent.effects.rules) return;
+                    
+                    talent.effects.rules.forEach(rule => {
+                        if (rule.trigger === 'start') {
+                            this.executeRule(rule, stats);
+                        }
+                    });
+                });
+                
+                return stats;
+            }
+            
+            static executeRule(rule, context) {
+                if (rule.condition) {
+                    if (!this.evaluateCondition(rule.condition, context)) {
+                        return;
+                    }
+                }
+                
+                switch (rule.action) {
+                    case 'add':
+                        if (context[rule.target] !== undefined) {
+                            context[rule.target] += rule.value;
+                        }
+                        break;
+                    case 'subtract':
+                        if (context[rule.target] !== undefined) {
+                            context[rule.target] -= rule.value;
+                        }
+                        break;
+                    case 'multiply':
+                        if (context[rule.target] !== undefined) {
+                            context[rule.target] *= rule.value;
+                        }
+                        break;
+                    case 'set':
+                        if (context[rule.target] !== undefined) {
+                            context[rule.target] = rule.value;
+                        }
+                        break;
+                }
+            }
+            
+            static evaluateCondition(condition, context) {
+                try {
+                    let expr = condition;
+                    Object.keys(context).forEach(key => {
+                        expr = expr.replace(new RegExp('\\b' + key + '\\b', 'g'), context[key]);
+                    });
+                    
+                    const safeEval = new Function(`return ${expr}`);
+                    return safeEval();
+                } catch (e) {
+                    console.warn('条件解析失败:', condition, e);
+                    return false;
+                }
+            }
+            
+            static formatEffects(talent) {
+                if (!talent.effects || !talent.effects.rules) return '';
+                
+                const lines = [];
+                talent.effects.rules.forEach(rule => {
+                    if (rule.trigger === 'start') {
+                        if (rule.action === 'add') {
+                            lines.push(`初始${this.getStatName(rule.target)}+${rule.value}`);
+                        } else if (rule.action === 'subtract') {
+                            lines.push(`初始${this.getStatName(rule.target)}-${rule.value}`);
+                        }
+                    } else if (rule.trigger === 'study') {
+                        if (rule.action === 'multiply') {
+                            lines.push(`学习效果×${rule.value}`);
+                        } else if (rule.action === 'add') {
+                            lines.push(`学习时${this.getStatName(rule.target)}+${rule.value}`);
+                        } else if (rule.action === 'subtract') {
+                            lines.push(`学习时${this.getStatName(rule.target)}-${rule.value}`);
+                        }
+                    } else if (rule.trigger === 'love') {
+                        if (rule.action === 'add') {
+                            lines.push(`恋爱时${this.getStatName(rule.target)}+${rule.value}`);
+                        } else if (rule.action === 'subtract') {
+                            lines.push(`恋爱时${this.getStatName(rule.target)}-${Math.abs(rule.value)}`);
+                        }
+                    } else if (rule.trigger === 'sports') {
+                        if (rule.action === 'multiply') {
+                            lines.push(`运动效果×${rule.value}`);
+                        } else if (rule.action === 'add') {
+                            lines.push(`运动时${this.getStatName(rule.target)}+${rule.value}`);
+                        }
+                    } else if (rule.trigger === 'social') {
+                        if (rule.action === 'multiply') {
+                            lines.push(`社交效果×${rule.value}`);
+                        } else if (rule.action === 'add') {
+                            lines.push(`社交时${this.getStatName(rule.target)}+${rule.value}`);
+                        }
+                    }
+                });
+                
+                return lines.slice(0, 3).join(' · ');
+            }
+            
+            static getStatName(stat) {
+                const names = { int: '智力', str: '体质', hap: '快乐', cha: '颜值' };
+                return names[stat] || stat;
+            }
+        }
+
+        // ==================== 属性分配逻辑 ====================
+        function updateRemainPoints() {
+            const sum = baseStats.int + baseStats.str + baseStats.hap + baseStats.cha;
+            const remain = totalPoints - sum;
+            document.getElementById('remainPoints').textContent = remain;
+            
+            document.querySelectorAll('.attr-btn').forEach(btn => {
+                const stat = btn.dataset.stat;
+                const delta = parseInt(btn.dataset.delta);
+                const newValue = baseStats[stat] + delta;
+                
+                if (delta > 0) {
+                    btn.disabled = (sum + delta > totalPoints) || (baseStats[stat] >= MAX_STAT);
+                } else {
+                    btn.disabled = baseStats[stat] <= MIN_STAT;
+                }
+            });
+        }
+
+        function updateStat(stat, value) {
+            value = Math.max(MIN_STAT, Math.min(MAX_STAT, value));
+            value = Math.round(value / STEP) * STEP;
+            
+            const sum = baseStats.int + baseStats.str + baseStats.hap + baseStats.cha;
+            const oldValue = baseStats[stat];
+            const delta = value - oldValue;
+            
+            if (sum + delta > totalPoints) {
+                value = oldValue + (totalPoints - sum);
+                value = Math.round(value / STEP) * STEP;
+            }
+            
+            baseStats[stat] = value;
+            
+            document.getElementById(`attr-${stat}`).textContent = value;
+            document.getElementById(`slider-${stat}`).value = value;
+            
+            updateRemainPoints();
+            updateStats();
+        }
+
+        function updateStats() {
+            const talentBonus = RuleEngine.calculateStartStats(selectedTalents);
+            
+            document.getElementById('stat-int').textContent = Math.round(baseStats.int + talentBonus.int);
+            document.getElementById('stat-str').textContent = Math.round(baseStats.str + talentBonus.str);
+            document.getElementById('stat-hap').textContent = Math.round(baseStats.hap + talentBonus.hap);
+            document.getElementById('stat-cha').textContent = Math.round(baseStats.cha + talentBonus.cha);
+        }
+
+        function resetAttributes() {
+            baseStats = { int: 50, str: 50, hap: 50, cha: 50 };
+            
+            ['int', 'str', 'hap', 'cha'].forEach(stat => {
+                document.getElementById(`attr-${stat}`).textContent = 50;
+                document.getElementById(`slider-${stat}`).value = 50;
+            });
+            
+            updateRemainPoints();
+            updateStats();
+        }
+
+        function initAttributeControls() {
+            ['int', 'str', 'hap', 'cha'].forEach(stat => {
+                const slider = document.getElementById(`slider-${stat}`);
+                slider.addEventListener('input', (e) => {
+                    const value = parseInt(e.target.value);
+                    const sum = baseStats.int + baseStats.str + baseStats.hap + baseStats.cha;
+                    const oldValue = baseStats[stat];
+                    const delta = value - oldValue;
+                    
+                    if (sum + delta <= totalPoints) {
+                        updateStat(stat, value);
+                    } else {
+                        const maxDelta = totalPoints - sum;
+                        updateStat(stat, oldValue + maxDelta);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.attr-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const stat = btn.dataset.stat;
+                    const delta = parseInt(btn.dataset.delta);
+                    updateStat(stat, baseStats[stat] + delta);
+                });
+            });
+        }
+
+        // ==================== 抽选逻辑 ====================
+        function drawTalents(count = 10) {
+            const pool = [...TALENTS_DATABASE];
+            const drawn = [];
+            
+            for (let i = 0; i < count && pool.length > 0; i++) {
+                const totalWeight = pool.reduce((sum, t) => {
+                    return sum + QUALITY_CONFIG[t.quality].weight;
+                }, 0);
+                
+                let random = Math.random() * totalWeight;
+                let selectedIndex = 0;
+                let weightSum = 0;
+                
+                for (let j = 0; j < pool.length; j++) {
+                    weightSum += QUALITY_CONFIG[pool[j].quality].weight;
+                    if (random <= weightSum) {
+                        selectedIndex = j;
+                        break;
+                    }
+                }
+                
+                drawn.push(pool[selectedIndex]);
+                pool.splice(selectedIndex, 1);
+            }
+            
+            return drawn;
+        }
+
+        // ==================== UI 渲染 ====================
+        function renderTalents() {
+            const grid = document.getElementById('talentsGrid');
+            grid.innerHTML = '';
+            
+            currentTalents.forEach((talent) => {
+                const card = document.createElement('div');
+                card.className = `talent-card quality-${talent.quality}`;
+                if (selectedTalents.includes(talent)) {
+                    card.classList.add('selected');
+                }
+                
+                const qualityCfg = QUALITY_CONFIG[talent.quality];
+                
+                card.innerHTML = `
+                    <div class="talent-name">
+                        ${talent.name}
+                        <span class="quality-badge" style="color: ${qualityCfg.color}">${qualityCfg.name}</span>
+                    </div>
+                    <div class="talent-desc">${talent.desc}</div>
+                    <div class="talent-effects">${RuleEngine.formatEffects(talent)}</div>
+                `;
+                
+                card.addEventListener('click', () => toggleTalent(talent));
+                grid.appendChild(card);
+            });
+            
+            updateStats();
+            updateButtons();
+        }
+
+        function toggleTalent(talent) {
+            const index = selectedTalents.indexOf(talent);
+            
+            if (index > -1) {
+                selectedTalents.splice(index, 1);
+            } else {
+                if (selectedTalents.length >= 3) {
+                    alert('最多只能选择3个天赋');
+                    return;
+                }
+                selectedTalents.push(talent);
+            }
+            
+            renderTalents();
+        }
+
+        function updateButtons() {
+            const count = selectedTalents.length;
+            document.getElementById('selectedCount').textContent = `(${count}/3)`;
+            document.getElementById('confirmBtn').disabled = count !== 3;
+        }
+
+        function reroll() {
+            currentTalents = drawTalents(10);
+            selectedTalents = [];
+            renderTalents();
+        }
+
+        function confirmSelection() {
+            if (selectedTalents.length !== 3) {
+                alert('请先选择3个天赋');
+                return;
+            }
+            
+            // const sum = baseStats.int + baseStats.str + baseStats.hap + baseStats.cha;
+            // if (sum !== totalPoints) {
+            //     alert(`请分配完所有属性点（剩余 ${totalPoints - sum} 点）`);
+            //     return;
+            // }
+            
+            const talentBonus = RuleEngine.calculateStartStats(selectedTalents);
+            const finalStats = {
+                int: baseStats.int + talentBonus.int,
+                str: baseStats.str + talentBonus.str,
+                hap: baseStats.hap + talentBonus.hap,
+                cha: baseStats.cha + talentBonus.cha
+            };
+            
+            const gameData = {
+                baseStats: { ...baseStats },
+                talents: selectedTalents.map(t => t.id),
+                finalStats: finalStats,
+                day: 1,
+                version: '1.0'
+            };
+            
+            localStorage.setItem('longgao_classic_save', JSON.stringify(gameData));
+            window.location.href = 'game.html';
+            // alert('✨ 角色创建完成！\n\n' +
+            //     `智力: ${Math.round(finalStats.int)}  体质: ${Math.round(finalStats.str)}\n` +
+            //     `快乐: ${Math.round(finalStats.hap)}  颜值: ${Math.round(finalStats.cha)}`);
+        }
+
+        function goBack() {
+            if (confirm('确定要返回吗？未保存的选择将丢失。')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==================== 星空背景 ====================
+        function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = [];
+                for (let i = 0; i < 150; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 2 + 0.5,
+                        b: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+            
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0a0f1e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                stars.forEach(s => {
+                    const twinkle = Math.sin(Date.now() * 0.002 + s.x) * 0.2 + 0.8;
+                    ctx.fillStyle = `rgba(255, 240, 200, ${s.b * twinkle})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(draw);
+            }
+            
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        }
+
+        // ==================== 初始化 ====================
+        function init() {
+            initStarfield();
+            initAttributeControls();
+            currentTalents = drawTalents(10);
+            renderTalents();
+            updateRemainPoints();
+            
+            document.getElementById('rerollBtn').addEventListener('click', reroll);
+            document.getElementById('confirmBtn').addEventListener('click', confirmSelection);
+            document.getElementById('resetAttrBtn').addEventListener('click', resetAttributes);
+        }
+
+        // 页面加载时先加载数据
+        loadTalentsData();
+    </script>
+</body>
+</html>

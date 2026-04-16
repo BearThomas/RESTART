@@ -1,0 +1,399 @@
+2<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>龙高 · 名人模式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0d1530 100%);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #ffd966, #ffb3b3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            color: #b8a0c0;
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        .celebrities-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .celebrity-card {
+            background: rgba(15, 30, 55, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(180, 210, 255, 0.2);
+            border-radius: 24px;
+            padding: 24px 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .celebrity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 215, 100, 0.4);
+        }
+
+        .celebrity-card.selected {
+            border-color: #ffd966;
+            box-shadow: 0 0 0 3px rgba(255, 215, 100, 0.3), 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .celebrity-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffd966;
+        }
+
+        .celebrity-desc {
+            font-size: 0.9rem;
+            color: #b8cce8;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .celebrity-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-mini {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .stat-mini span:first-child {
+            color: #8aa0c0;
+        }
+
+        .stat-mini span:last-child {
+            color: #a0c4ff;
+            font-weight: 600;
+        }
+
+        .celebrity-talents {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+            font-size: 0.85rem;
+        }
+
+        .talent-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            margin: 3px 5px 3px 0;
+            background: rgba(100, 150, 200, 0.2);
+            border-radius: 20px;
+            color: #b8d4ff;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .btn {
+            padding: 16px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: rgba(30, 50, 90, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba(180, 210, 255, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #daa520, #b8860b);
+            border-color: rgba(255, 215, 100, 0.5);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            padding: 10px 20px;
+            background: rgba(20, 40, 70, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 40px;
+            color: #c0d8ff;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(60, 100, 160, 0.5);
+        }
+
+        @media (max-width: 800px) {
+            .celebrities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <div class="back-btn" onclick="goBack()">← 返回首页</div>
+
+    <div class="container">
+        <div class="header">
+            <h1>名人模式</h1>
+            <p>选择一位名人，以Ta的身份开始龙高生涯</p>
+        </div>
+
+        <div class="celebrities-grid" id="celebritiesGrid"></div>
+
+        <div class="action-bar">
+            <button class="btn" id="rerollBtn">🔄 重新抽取</button>
+            <button class="btn btn-primary" id="confirmBtn" disabled>✨ 开始游戏</button>
+        </div>
+    </div>
+
+    <script>
+        let celebritiesDatabase = [];
+        let currentCelebrities = [];
+        let selectedCelebrity = null;
+        let talentsDatabase = [];
+        
+
+        // ==================== 加载名人数据 ====================
+        async function loadCelebrities() {
+            try {
+                const res = await fetch('./data/celebrities.json');
+                const data = await res.json();
+                celebritiesDatabase = data.celebrities;
+                init();
+            } catch (error) {
+                console.error('加载失败:', error);
+                useFallbackCelebrities();
+                init();
+            }
+            try {
+                const res = await fetch('./data/talents.json');
+                const data = await res.json();
+                talentsDatabase = data.talents;
+                init();
+            } catch (error) {
+                console.error('加载失败:', error);
+                useFallbackCelebrities();
+                init();
+            }
+        }
+
+        function useFallbackCelebrities() {
+            celebritiesDatabase = [
+                { id: 'c001', name: '爱因斯坦', desc: '理论物理学家', stats: { int: 180, str: 40, hap: 60, cha: 50 }, talents: [] },
+                { id: 'c002', name: '姚明', desc: '篮球巨星', stats: { int: 70, str: 160, hap: 80, cha: 90 }, talents: [] },
+                { id: 'c003', name: '周杰伦', desc: '华语乐坛天王', stats: { int: 90, str: 60, hap: 100, cha: 140 }, talents: [] }
+            ];
+        }
+
+        // ==================== 随机抽取3个名人 ====================
+        function drawCelebrities() {
+            const shuffled = [...celebritiesDatabase].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, 3);
+        }
+
+        // ==================== 渲染 ====================
+        function renderCelebrities() {
+            const grid = document.getElementById('celebritiesGrid');
+            grid.innerHTML = '';
+
+            currentCelebrities.forEach(celeb => {
+                const card = document.createElement('div');
+                card.className = 'celebrity-card';
+                if (selectedCelebrity && selectedCelebrity.id === celeb.id) {
+                    card.classList.add('selected');
+                }
+                console.log(celeb.talents);
+                const talentsHtml = (celeb.talents || []).map(t => `<span class="talent-tag">天赋 #${talentsDatabase.find(talent => talent.id === t)?.name || t}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="celebrity-name">${celeb.name}</div>
+                    <div class="celebrity-desc">${celeb.desc}</div>
+                    <div class="celebrity-stats">
+                        <div class="stat-mini"><span>🧠 智力</span><span>${celeb.stats.int}</span></div>
+                        <div class="stat-mini"><span>💪 体质</span><span>${celeb.stats.str}</span></div>
+                        <div class="stat-mini"><span>😊 快乐</span><span>${celeb.stats.hap}</span></div>
+                        <div class="stat-mini"><span>✨ 颜值</span><span>${celeb.stats.cha}</span></div>
+                    </div>
+                    <div class="celebrity-talents">
+                        ${talentsHtml || '<span style="opacity:0.5;">无特殊天赋</span>'}
+                    </div>
+                `;
+
+                card.addEventListener('click', () => selectCelebrity(celeb));
+                grid.appendChild(card);
+            });
+
+            document.getElementById('confirmBtn').disabled = !selectedCelebrity;
+        }
+
+        function selectCelebrity(celeb) {
+            selectedCelebrity = celeb;
+            renderCelebrities();
+        }
+
+        function reroll() {
+            currentCelebrities = drawCelebrities();
+            selectedCelebrity = null;
+            renderCelebrities();
+        }
+
+        function confirmSelection() {
+            if (!selectedCelebrity) return;
+
+            // 保存游戏数据
+            const gameData = {
+                mode: 'celebrity',
+                celebrityId: selectedCelebrity.id,
+                celebrityName: selectedCelebrity.name,
+                baseStats: { ...selectedCelebrity.stats },
+                finalStats: { ...selectedCelebrity.stats },
+                talents: selectedCelebrity.talents || [],
+                day: 1,
+                version: '1.0'
+            };
+
+            localStorage.setItem('longgao_classic_save', JSON.stringify(gameData));
+
+            // 跳转到游戏界面
+            window.location.href = 'game.html';
+        }
+
+        function goBack() {
+            if (confirm('确定要返回吗？')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==================== 星空背景 ====================
+        function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = [];
+                for (let i = 0; i < 100; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 2 + 0.5,
+                        b: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0a0f1e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                stars.forEach(s => {
+                    const twinkle = Math.sin(Date.now() * 0.002 + s.x) * 0.2 + 0.8;
+                    ctx.fillStyle = `rgba(255, 240, 200, ${s.b * twinkle})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        }
+
+        function init() {
+            initStarfield();
+            currentCelebrities = drawCelebrities();
+            renderCelebrities();
+
+            document.getElementById('rerollBtn').addEventListener('click', reroll);
+            document.getElementById('confirmBtn').addEventListener('click', confirmSelection);
+        }
+
+        loadCelebrities();
+    </script>
+</body>
+</html>

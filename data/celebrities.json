@@ -1,0 +1,11 @@
+{
+  "celebrities": [
+    {
+      "id": "zhongsituo",
+      "name": "钟思拓",
+      "desc": "反家教创始人，痴迷数学",
+      "stats": { "int": 120, "str": 60, "hap": 100, "cha": 80 },
+      "talents": ["talent_gentleman", "talent_natural_manners", "talent_math_lover"]
+    }
+  ]
+}

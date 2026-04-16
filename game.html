@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>龙高 · 经典模式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0d1530 100%);
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部属性栏 */
+        .stats-bar {
+            background: rgba(15, 30, 55, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #8aa0c0;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #e0ecff;
+        }
+
+        .day-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #b8d4ff;
+        }
+
+        .day-info span {
+            background: rgba(60, 100, 160, 0.4);
+            padding: 5px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(180, 210, 255, 0.2);
+        }
+
+        /* 事件卡片 */
+        .event-card {
+            background: rgba(15, 30, 55, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #d0e4ff;
+        }
+
+        .event-desc {
+            font-size: 1.1rem;
+            color: #b0c8e8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .event-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .event-option {
+            background: rgba(60, 100, 160, 0.3);
+            border: 1.5px solid rgba(180, 210, 255, 0.25);
+            border-radius: 50px;
+            padding: 14px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+            color: #d0e4ff;
+        }
+
+        .event-option:hover {
+            background: rgba(100, 160, 240, 0.5);
+            border-color: rgba(220, 240, 255, 0.5);
+            transform: scale(1.01);
+        }
+
+        /* 事件日志 */
+        .event-log {
+            background: rgba(10, 20, 40, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(180, 210, 255, 0.15);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            color: #a0b8d8;
+        }
+
+        .log-entry {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* 底部控制栏 */
+        .control-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(30, 50, 90, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1.5px solid rgba(180, 210, 255, 0.3);
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3a5f8f, #2a4570);
+            border-color: rgba(200, 220, 255, 0.5);
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            background: rgba(50, 80, 130, 0.8);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .auto-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(30, 50, 90, 0.5);
+            border-radius: 50px;
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            cursor: pointer;
+        }
+
+        .auto-toggle input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* 成就弹窗 */
+        .achievement-toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(20, 40, 70, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffd966;
+            border-radius: 16px;
+            padding: 15px 25px;
+            z-index: 100;
+            animation: slideIn 0.4s ease;
+            box-shadow: 0 0 30px rgba(255, 215, 100, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 结局面板 */
+        .ending-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ending-content {
+            background: rgba(20, 40, 70, 0.95);
+            border: 2px solid rgba(200, 220, 255, 0.3);
+            border-radius: 40px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .ending-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffd966;
+        }
+
+        .ending-scores {
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            padding: 10px 20px;
+            background: rgba(20, 40, 70, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(180, 210, 255, 0.2);
+            border-radius: 40px;
+            color: #c0d8ff;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(60, 100, 160, 0.5);
+        }
+
+        .event-continue {
+            margin-top: 20px;
+        }
+
+        .event-log {
+            background: rgba(10, 20, 40, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(180, 210, 255, 0.15);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            color: #a0b8d8;
+        }
+
+        .auto-indicator {
+            display: inline-block;
+            margin-left: 10px;
+            padding: 2px 10px;
+            background: rgba(255, 215, 100, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #ffd966;
+        }
+
+        /* 事件日志 - 更醒目 */
+        .event-log {
+            background: rgba(20, 40, 70, 0.8);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(180, 210, 255, 0.3);
+            border-radius: 20px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 1rem;
+            color: #d0e4ff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .log-entry {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(180, 210, 255, 0.15);
+            line-height: 1.5;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        /* 不同日志类型颜色 */
+        .log-entry.study { color: #a0c4ff; }
+        .log-entry.social { color: #ffb3b3; }
+        .log-entry.love { color: #ffb3d9; }
+        .log-entry.achievement { color: #ffd966; font-weight: 600; }
+
+        .event-continue {
+            margin-top: 25px;
+        }
+
+        /* 控制栏居中 */
+        .control-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 0;
+        }
+        /* 结局面板中的成绩单样式 */
+        .ending-content h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .log-entry.exam {
+            color: #ffd966;
+            font-weight: 600;
+            background: rgba(255, 215, 100, 0.1);
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starfield"></canvas>
+
+    <div class="back-btn" onclick="goBack()">← 返回</div>
+
+    <div class="container">
+        <!-- 属性栏 -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">🧠 智力</div>
+                <div class="stat-value" id="stat-int">50</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">💪 体质</div>
+                <div class="stat-value" id="stat-str">50</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">😊 快乐</div>
+                <div class="stat-value" id="stat-hap">50</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">✨ 颜值</div>
+                <div class="stat-value" id="stat-cha">50</div>
+            </div>
+        </div>
+
+        <!-- 天数 -->
+        <div class="day-info">
+            <span>📅 第 <span id="currentDay">1</span> / 100 天</span>
+        </div>
+
+         <!-- 事件日志 -->
+        <div class="event-log" id="eventLog">
+            <div class="log-entry">✨ 游戏开始！祝你度过精彩的龙高时光！</div>
+        </div>
+
+        <!-- 事件卡片 -->
+        <!-- 事件卡片 -->
+        <div class="event-card" id="eventCard">
+            <div class="event-title" id="eventTitle">加载中...</div>
+            <div class="event-desc" id="eventDesc">正在初始化游戏...</div>
+            <div class="event-options" id="eventOptions"></div>
+            <!-- 添加这个继续按钮容器 -->
+            <div class="event-continue" id="eventContinue" style="display:none;">
+                <button class="btn btn-primary" id="continueBtn" style="width:100%;">继续</button>
+            </div>
+        </div>
+
+        <!-- 控制栏 -->
+        <div class="control-bar">
+            <div class="auto-toggle" id="autoToggle">
+                <input type="checkbox" id="autoMode"> 自动模式
+            </div>
+            <span style="flex:1; text-align:right; opacity:0.6; font-size:0.9rem;" id="autoHint"></span>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 游戏状态 ====================
+        let gameState = {
+            day: 1,
+            stats: { int: 50, str: 50, hap: 50, cha: 50 },
+            talents: [],
+            achievements: [],
+            completedEvents: [],      // 记录已完成的一次性事件ID
+            history: []
+        };
+
+        let eventsDatabase = [];
+        let achievementsDatabase = [];
+        let currentEvent = null;
+        let autoMode = false;
+        let autoTimer = null;
+        let gameEnded = false;
+        let fanjiajao = 0;
+        let _loveCount = 0;
+
+        // ==================== 添加连锁事件处理 ====================
+        let pendingChainEvent = null;  // 待处理的连锁事件
+
+        // ==================== 修改 loadGameData ====================
+        // ==================== 加载存档 ====================
+        function loadGameData() {
+            const saved = localStorage.getItem('longgao_classic_save');
+            if (saved) {
+                const data = JSON.parse(saved);
+                gameState.stats = data.finalStats || data.stats || { int: 50, str: 50, hap: 50, cha: 50 };
+                gameState.talents = data.talents || [];
+                gameState.day = data.day || 1;
+            }
+            
+            // 成就永远从永久存储中加载（不随存档重置）
+            const permanentAchievements = localStorage.getItem('longgao_achievements_permanent');
+            if (permanentAchievements) {
+                gameState.achievements = JSON.parse(permanentAchievements);
+            } else {
+                gameState.achievements = [];
+            }
+            
+            // 进度相关的不加载，每次新游戏从头开始
+            gameState.completedEvents = [];
+        }
+
+        function evaluateCondition(condition) {
+            if (!condition) return true;
+            
+            try {
+                const context = {
+                    day: gameState.day,
+                    int: gameState.stats.int,
+                    str: gameState.stats.str,
+                    hap: gameState.stats.hap,
+                    cha: gameState.stats.cha,
+                    hasTalent: hasTalent,
+                    hasAnyTalent: hasAnyTalent,
+                    hasAllTalents: hasAllTalents
+                };
+                
+                const keys = Object.keys(context);
+                const values = keys.map(k => context[k]);
+                const func = new Function(...keys, `return ${condition}`);
+                return func(...values);
+            } catch (e) {
+                console.error('条件解析失败:', condition, e);
+                return true;
+            }
+        }
+
+        // ==================== 加载事件和成就数据 ====================
+        async function loadGameDataFiles() {
+            try {
+                // 加载事件
+                const eventsRes = await fetch('./data/events.json');
+                eventsDatabase = await eventsRes.json();
+                
+                // 加载成就
+                const achieveRes = await fetch('./data/achievements.json');
+                achievementsDatabase = await achieveRes.json();
+                
+                startGame();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                useFallbackData();
+                startGame();
+            }
+        }
+
+        function useFallbackData() {
+            eventsDatabase = [
+                { id: 'e001', type: 'study', name: '自习课', desc: '你在自习课上...', 
+                  options: [
+                      { text: '认真复习', effects: [{ stat: 'int', add: 5, str: -2 }], desc: '智力+5，体质-2' },
+                      { text: '偷偷玩手机', effects: [{ stat: 'hap', add: 5, int: -2 }], desc: '快乐+5，智力-2' }
+                  ], weight: 10 },
+                { id: 'e002', type: 'social', name: '课间休息', desc: '同学们在聊天...',
+                  options: [
+                      { text: '加入聊天', effects: [{ stat: 'hap', add: 3, cha: 2 }], desc: '快乐+3，颜值+2' },
+                      { text: '独自看书', effects: [{ stat: 'int', add: 3 }], desc: '智力+3' }
+                  ], weight: 10 },
+                { id: 'e003', type: 'love', name: '心动的感觉', desc: '你注意到有人在看你...',
+                  options: [
+                      { text: '主动搭话', effects: [{ stat: 'hap', add: 8, cha: 3, int: -3 }], desc: '快乐+8，颜值+3，智力-3' },
+                      { text: '假装没看见', effects: [{ stat: 'int', add: 2 }], desc: '智力+2' }
+                  ], weight: 5, condition: 'cha > 60' }
+            ];
+            
+            achievementsDatabase = [
+                { id: 'a001', name: '学霸之路', desc: '智力达到100', condition: 'int >= 100' },
+                { id: 'a002', name: '社交达人', desc: '颜值达到80', condition: 'cha >= 80' },
+                { id: 'a003', name: '快乐人生', desc: '快乐达到90', condition: 'hap >= 90' }
+            ];
+        }
+
+        // ==================== 游戏开始 ====================
+        function startGame() {
+            updateStatsDisplay();
+            updateDayDisplay();
+            checkAchievements();
+            pickNextEvent();
+        }
+
+        // ==================== 修改 pickNextEvent ====================
+        function pickNextEvent() {
+            if (gameState.day > 200) {
+                endGame();
+                return;
+            }
+
+            // 筛选可用事件
+            const availableEvents = eventsDatabase.filter(e => {
+                // 条件检查
+                if (e.condition && !evaluateCondition(e.condition)) return false;
+                
+                // 一次性事件检查：如果 once 为 true 且已完成列表中包含此ID，则过滤掉
+                if (e.once && gameState.completedEvents.includes(e.id)) return false;
+                
+                return true;
+            });
+
+            if (availableEvents.length === 0) {
+                currentEvent = {
+                    id: 'default',
+                    type: 'normal',
+                    name: '平淡的一天',
+                    desc: '今天没什么特别的事发生...',
+                    options: null
+                };
+            } else {
+                const totalWeight = availableEvents.reduce((s, e) => s + (e.weight || 10), 0);
+                let random = Math.random() * totalWeight;
+                let sum = 0;
+                for (const e of availableEvents) {
+                    sum += e.weight || 10;
+                    if (random <= sum) {
+                        currentEvent = JSON.parse(JSON.stringify(e));
+                        break;
+                    }
+                }
+            }
+
+            displayEvent();
+        }
+
+        // ==================== 标记事件完成 ====================
+        function markEventCompleted(eventId) {
+            if (eventId && eventId !== 'default' && !gameState.completedEvents.includes(eventId)) {
+                gameState.completedEvents.push(eventId);
+                // 保存到 localStorage
+                saveGameState();
+            }
+        }
+
+        function displayEvent() {
+            document.getElementById('eventTitle').textContent = currentEvent.name;
+            document.getElementById('eventDesc').textContent = currentEvent.desc;
+            
+            const optionsDiv = document.getElementById('eventOptions');
+            const continueDiv = document.getElementById('eventContinue');
+            
+            // 判断是否有选项
+            if (currentEvent.options && currentEvent.options.length > 0) {
+                // 有选项：显示选项，隐藏继续按钮
+                optionsDiv.style.display = 'block';
+                continueDiv.style.display = 'none';
+                optionsDiv.innerHTML = '';
+                
+                currentEvent.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = 'event-option';
+                    btn.innerHTML = `<strong>${opt.text}</strong><br><small style="opacity:0.8">${opt.desc || ''}</small>`;
+                    btn.addEventListener('click', () => selectOption(idx));
+                    optionsDiv.appendChild(btn);
+                });
+                
+                // 更新提示
+                document.getElementById('autoHint').textContent = autoMode ? '⏸ 自动暂停，请选择' : '';
+            } else {
+                // 无选项：隐藏选项，显示继续按钮
+                optionsDiv.style.display = 'none';
+                continueDiv.style.display = 'block';
+                
+                const continueBtn = document.getElementById('continueBtn');
+                const newBtn = continueBtn.cloneNode(true);
+                continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+                newBtn.addEventListener('click', () => processNoOptionEvent());
+                
+                document.getElementById('autoHint').textContent = autoMode ? '🔄 自动继续中...' : '';
+                
+                // 自动模式下自动继续
+                if (autoMode && !gameEnded) {
+                    setTimeout(() => handleContinue(), 500);
+                }
+            }
+        }
+
+        // ==================== 处理无选项事件 ====================
+        function processNoOptionEvent() {
+            if (currentEvent.autoEffects) {
+                currentEvent.autoEffects.forEach(eff => {
+                    Object.keys(eff).forEach(key => {
+                        if (gameState.stats[key] !== undefined) {
+                            gameState.stats[key] = gameState.stats[key] + eff[key];
+                        }
+                    });
+                });
+                updateStatsDisplay();
+            }
+            if (currentEvent.name == "反家教") fanjiajao++;
+            if (currentEvent.type == "love") _loveCount++;
+            console.log(`📌 ${currentEvent.name}`, currentEvent.type, currentEvent.achievement);
+            addLog(`📌 ${currentEvent.name}`, currentEvent.type);
+            unlockAchievement(currentEvent.achievement);
+            
+            // 标记一次性事件完成
+            markEventCompleted(currentEvent.id);
+            
+            checkAchievements();
+            goToNextDay();
+        }
+
+        // ==================== 解锁成就 ====================
+        function unlockAchievement(achievementId) {
+            if (!gameState.achievements.includes(achievementId)) {
+                gameState.achievements.push(achievementId);
+                
+                // 保存到永久存储
+                localStorage.setItem('longgao_achievements_permanent', JSON.stringify(gameState.achievements));
+                
+                // 从成就数据库找详细信息
+                const ach = achievementsDatabase.find(a => a.id === achievementId);
+                if (ach) {
+                    showAchievementToast(ach);
+                    addLog(`🏆 获得成就：${ach.name}`, 'achievement');
+                }
+                
+                saveGameState();
+            }
+        }
+
+        // ==================== 修改 handleContinue ====================
+        function handleContinue() {
+            // 应用效果
+            if (currentEvent.autoEffects) {
+                currentEvent.autoEffects.forEach(eff => {
+                    Object.keys(eff).forEach(key => {
+                        if (gameState.stats[key] !== undefined) {
+                            gameState.stats[key] = gameState.stats[key] + eff[key];
+                        }
+                    });
+                });
+                updateStatsDisplay();
+            }
+            console.log(currentEvent)
+            if(currentEvent.name == "反家教") fanjiajao++;
+            if (currentEvent.type == "love") _loveCount++;
+            
+            addLog(`📌 ${currentEvent.name}`, currentEvent.type);
+            
+            // 标记一次性事件完成
+            markEventCompleted(currentEvent.id);
+            
+            checkAchievements();
+            goToNextDay();
+        }
+
+
+
+        function selectOption(idx) {
+            const option = currentEvent.options[idx];
+            
+            // 应用效果
+            if (option.effects) {
+                option.effects.forEach(eff => {
+                    Object.keys(eff).forEach(key => {
+                        if (gameState.stats[key] !== undefined) {
+                            gameState.stats[key] = Math.max(0, Math.min(200, gameState.stats[key] + eff[key]));
+                        }
+                    });
+                });
+            }
+
+            addLog(`📌 ${currentEvent.name}：选择了「${option.text}」`, currentEvent.type);
+            
+            updateStatsDisplay();
+            
+            // 检查事件自带成就
+            if (currentEvent.achievement) {
+                unlockAchievement(currentEvent.achievement);
+            }
+            console.log(`📌 ${currentEvent.name}`, currentEvent.type, currentEvent.achievement);
+            markEventCompleted(currentEvent.id);
+            checkAchievements();
+            
+            // 禁用所有选项
+            document.querySelectorAll('.event-option').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.6';
+            });
+            
+            // 检查是否有连锁事件
+            if (option.chainEvent) {
+                const chain = option.chainEvent;
+                const probability = chain.probability || 0;
+                
+                if (Math.random() < probability) {
+                    pendingChainEvent = chain;
+                    setTimeout(() => showChainEvent(), 500);
+                    return;
+                }
+            }
+            
+            setTimeout(() => goToNextDay(), 400);
+        }
+
+
+        // 显示连锁事件
+        // ==================== 显示连锁事件 ====================
+        function showChainEvent() {
+            if (!pendingChainEvent) {
+                goToNextDay();
+                return;
+            }
+            
+            const chain = pendingChainEvent;
+            pendingChainEvent = null;
+            
+            // 检查是否有 outcomes（随机结果）
+            if (chain.outcomes && chain.outcomes.length > 0) {
+                // 计算每个结果的动态概率
+                const outcomesWithProb = chain.outcomes.map(outcome => {
+                    let prob = outcome.probability;
+                    if (typeof prob === 'string') {
+                        try {
+                            const hasTalent = (id) => gameState.talents && gameState.talents.includes(id);
+                            prob = eval(prob);
+                        } catch (e) {
+                            console.error('概率表达式错误:', prob, e);
+                            prob = 0;
+                        }
+                    }
+                    return { 
+                        ...outcome, 
+                        _prob: parseFloat(prob) || 0 
+                    };
+                });
+                
+                // 计算总概率
+                const totalProb = outcomesWithProb.reduce((sum, o) => sum + o._prob, 0);
+                const random = Math.random() * totalProb;
+                let sum = 0;
+                let selectedOutcome = outcomesWithProb[0];
+                
+                for (const outcome of outcomesWithProb) {
+                    sum += outcome._prob;
+                    if (random <= sum) {
+                        selectedOutcome = outcome;
+                        break;
+                    }
+                }
+                
+                // 应用效果
+                if (selectedOutcome.effects) {
+                    selectedOutcome.effects.forEach(eff => {
+                        Object.keys(eff).forEach(key => {
+                            if (gameState.stats[key] !== undefined) {
+                                gameState.stats[key] = Math.max(0, Math.min(200, gameState.stats[key] + eff[key]));
+                            }
+                        });
+                    });
+                    updateStatsDisplay();
+                }
+                
+                addLog(`📌 ${chain.name}：${selectedOutcome.name}`, 'chain');
+                
+                // 检查连锁事件是否带成就
+                if (chain.achievement) {
+                    unlockAchievement(chain.achievement);
+                }
+                
+                // 检查选中的结果是否带成就
+                if (selectedOutcome.achievement) {
+                    unlockAchievement(selectedOutcome.achievement);
+                }
+                
+                // 显示结果
+                document.getElementById('eventTitle').textContent = '✨ ' + chain.name;
+                document.getElementById('eventDesc').textContent = selectedOutcome.desc;
+                
+                const optionsDiv = document.getElementById('eventOptions');
+                const continueDiv = document.getElementById('eventContinue');
+                
+                optionsDiv.style.display = 'none';
+                continueDiv.style.display = 'block';
+                
+                const continueBtn = document.getElementById('continueBtn');
+                const newBtn = continueBtn.cloneNode(true);
+                continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+                newBtn.addEventListener('click', () => {
+                    checkAchievements();
+                    goToNextDay();
+                });
+                
+                if (autoMode && !gameEnded) {
+                    setTimeout(() => {
+                        if (!gameEnded && autoMode) {
+                            checkAchievements();
+                            goToNextDay();
+                        }
+                    }, 800);
+                }
+                
+                checkAchievements();
+                return;
+            }
+            
+            // 原有逻辑：有选项的连锁事件
+            document.getElementById('eventTitle').textContent = '✨ ' + chain.name;
+            document.getElementById('eventDesc').textContent = chain.desc;
+            
+            const optionsDiv = document.getElementById('eventOptions');
+            const continueDiv = document.getElementById('eventContinue');
+            
+            if (chain.options && chain.options.length > 0) {
+                optionsDiv.style.display = 'block';
+                continueDiv.style.display = 'none';
+                optionsDiv.innerHTML = '';
+                
+                chain.options.forEach((opt, idx) => {
+                    const btn = document.createElement('div');
+                    btn.className = 'event-option';
+                    btn.innerHTML = `<strong>${opt.text}</strong><br><small style="opacity:0.8">${opt.desc || ''}</small>`;
+                    btn.addEventListener('click', () => selectChainOption(chain, idx));
+                    optionsDiv.appendChild(btn);
+                });
+                
+                document.getElementById('autoHint').textContent = autoMode ? '⏸ 自动暂停，请选择' : '';
+            } else {
+                optionsDiv.style.display = 'none';
+                continueDiv.style.display = 'block';
+                
+                const continueBtn = document.getElementById('continueBtn');
+                const newBtn = continueBtn.cloneNode(true);
+                continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+                newBtn.addEventListener('click', () => handleChainContinue(chain));
+                
+                // 检查连锁事件是否带成就（无选项时）
+                if (chain.achievement) {
+                    unlockAchievement(chain.achievement);
+                }
+                
+                if (autoMode && !gameEnded) {
+                    setTimeout(() => handleChainContinue(chain), 500);
+                }
+            }
+        }        // ==================== 修改 selectChainOption ====================
+        function selectChainOption(chainEvent, idx) {
+            const option = chainEvent.options[idx];
+            
+            if (option.effects) {
+                option.effects.forEach(eff => {
+                    Object.keys(eff).forEach(key => {
+                        if (gameState.stats[key] !== undefined) {
+                            gameState.stats[key] = Math.max(0, Math.min(200, gameState.stats[key] + eff[key]));
+                        }
+                    });
+                });
+            }
+            
+            addLog(`📌 ${chainEvent.name}：选择了「${option.text}」`, 'chain');
+            
+            updateStatsDisplay();
+            
+            // 检查连锁事件是否带成就
+            if (chainEvent.achievement) {
+                unlockAchievement(chainEvent.achievement);
+            }
+            
+            // 检查选中的选项是否带成就
+            if (option.achievement) {
+                unlockAchievement(option.achievement);
+            }
+            
+            // 连锁事件也可以设置为一次性
+            if (chainEvent.once && chainEvent.id) {
+                markEventCompleted(chainEvent.id);
+            }
+            
+            checkAchievements();
+            
+            document.querySelectorAll('.event-option').forEach(btn => {
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.6';
+            });
+            
+            if (option.chainEvent) {
+                const nextChain = option.chainEvent;
+                if (Math.random() < (nextChain.probability || 0)) {
+                    pendingChainEvent = nextChain;
+                    setTimeout(() => showChainEvent(), 500);
+                    return;
+                }
+            }
+            
+            setTimeout(() => goToNextDay(), 400);
+        }
+
+        // ==================== 修改 handleChainContinue ====================
+       function handleChainContinue(chainEvent) {
+            if (chainEvent.autoEffects) {
+                chainEvent.autoEffects.forEach(eff => {
+                    Object.keys(eff).forEach(key => {
+                        if (gameState.stats[key] !== undefined) {
+                            gameState.stats[key] = Math.max(0, Math.min(200, gameState.stats[key] + eff[key]));
+                        }
+                    });
+                });
+                updateStatsDisplay();
+            }
+            
+            addLog(`📌 ${chainEvent.name}`, 'chain');
+            
+            // 检查连锁事件是否带成就
+            if (chainEvent.achievement) {
+                unlockAchievement(chainEvent.achievement);
+            }
+            
+            // 连锁事件也可以设置为一次性
+            if (chainEvent.once && chainEvent.id) {
+                markEventCompleted(chainEvent.id);
+            }
+            
+            checkAchievements();
+            goToNextDay();
+        }
+
+        // ==================== 下一天 ====================
+        function nextDay() {
+            if (gameEnded) return;
+            
+            gameState.day++;
+            updateDayDisplay();
+            
+            if (gameState.day > 100) {
+                endGame();
+            } else {
+                pickNextEvent();
+            }
+        }
+
+        // ==================== 成就检查 ====================
+        function checkAchievements() {
+            achievementsDatabase.forEach(ach => {
+                // 跳过已经解锁的成就
+                if (gameState.achievements.includes(ach.id)) return;
+                
+                // 检查条件
+                if (ach.condition && evaluateCondition(ach.condition)) {
+                    unlockAchievement(ach.id);
+                }
+            });
+        }
+
+        // 查看永久成就
+        function showPermanentAchievements() {
+            const permanent = JSON.parse(localStorage.getItem('longgao_achievements_permanent') || '[]');
+            console.log('🏆 永久成就列表:');
+            achievementsDatabase.forEach(ach => {
+                const unlocked = permanent.includes(ach.id);
+                console.log(`${unlocked ? '✅' : '❌'} ${ach.name} - ${ach.desc}`);
+            });
+        }
+
+        // 清除永久成就（慎用）
+        function clearPermanentAchievements() {
+            if (confirm('确定要清除所有永久成就吗？')) {
+                localStorage.removeItem('longgao_achievements_permanent');
+                gameState.achievements = [];
+                console.log('✅ 永久成就已清除');
+                location.reload();
+            }
+        }
+
+        // 挂载到 window
+        window.showPermanentAchievements = showPermanentAchievements;
+        window.clearPermanentAchievements = clearPermanentAchievements;
+        function showAchievementToast(ach) {
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `<strong>🏆 成就解锁！</strong><br>${ach.name}<br><small>${ach.desc}</small>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ==================== 结局计算 ====================
+        function endGame() {
+            gameEnded = true;
+            if (autoTimer) clearTimeout(autoTimer);
+            
+            // 计算考试成绩
+            const scores = calculateExamScores();
+            
+            // 计算总分
+            const totalScore = scores.chinese + scores.math + scores.english + 
+                              scores.history + scores.physics + scores.politics + scores.bio_geo;
+            
+            // 判定结局
+            let ending = '';
+            let endingDesc = '';
+            
+            if (totalScore >= 550) {
+                ending = '🎓 深中点招！';
+                endingDesc = '你的成绩优异，已经被深中提前锁定！';
+            } else if (totalScore >= 480) {
+                ending = '📚 重点高中';
+                endingDesc = '你考上了一所不错的重点高中，未来可期！';
+            } else if (totalScore >= 400) {
+                ending = '🏫 普通高中';
+                endingDesc = '你考上了一所普通高中，高中生活即将开始。';
+            } else if (totalScore >= 300) {
+                ending = '📖 技术学校';
+                endingDesc = '虽然成绩不太理想，但至少还有学上...';
+            } else {
+                ending = '😔 名落孙山';
+                endingDesc = '很遗憾，你没有考上... 或许……';
+            }
+            
+            // 根据属性追加评价
+            if (gameState.stats.hap >= 80) {
+                endingDesc += ' 不过你的初中生活过得很开心！';
+            }
+            if (gameState.stats.cha >= 80) {
+                endingDesc += ' 而且你的人缘一直很好。';
+            }
+            
+            addLog(`🎉 中考结束！总分: ${totalScore}`, 'achievement');
+            
+            // 显示结局面板
+            showEndingPanel(ending, endingDesc, scores, totalScore);
+            
+            // 清除临时存档
+            localStorage.removeItem('longgao_current_game');
+        }
+
+        function calculateExamScores() {
+            const int = gameState.stats.int;
+            const hap = gameState.stats.hap;
+            
+            // 基础分 + 智力加成 + 快乐影响（太快乐或太不快乐都影响发挥）
+            const happinessFactor = hap >= 70 ? 1.05 : (hap <= 30 ? 0.9 : 1.0);
+            
+            const calc = (base, max) => {
+                // 智力加成：每点智力增加约0.3%的分数
+                const intBonus = 1 + (int - 50) * 0.004;
+                // 随机波动 ±10%
+                const randomFactor = 0.9 + Math.random() * 0.2;
+                // 计算最终分数
+                let score = base * intBonus * randomFactor * happinessFactor;
+                return Math.min(max, Math.round(score));
+            };
+            
+            // 各科满分和基础分
+            const subjects = {
+                chinese: { base: 85, max: 120 },
+                math: { base: 65, max: 100 },
+                english: { base: 65, max: 100 },
+                history: { base: 45, max: 70 },
+                physics: { base: 45, max: 70 },
+                politics: { base: 30, max: 50 },
+                bio_geo: { base: 65, max: 100 }
+            };
+            
+            return {
+                chinese: calc(subjects.chinese.base, subjects.chinese.max),
+                math: calc(subjects.math.base, subjects.math.max),
+                english: calc(subjects.english.base, subjects.english.max),
+                history: calc(subjects.history.base, subjects.history.max),
+                physics: calc(subjects.physics.base, subjects.physics.max),
+                politics: calc(subjects.politics.base, subjects.politics.max),
+                bio_geo: calc(subjects.bio_geo.base, subjects.bio_geo.max)
+            };
+        }
+
+        function showEndingPanel(ending, endingDesc, scores, totalScore) {
+            const panel = document.createElement('div');
+            panel.className = 'ending-panel';
+            panel.innerHTML = `
+                <div class="ending-content">
+                    <div class="ending-title">${ending}</div>
+                    <p style="margin-bottom:20px; opacity:0.9;">${endingDesc}</p>
+                    
+                    <div style="background:rgba(0,0,0,0.2); border-radius:16px; padding:20px; margin:20px 0;">
+                        <h3 style="margin-bottom:15px; color:#ffd966;">📊 中考成绩单</h3>
+                        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px 20px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>语文</span>
+                                <span style="color:#a0c4ff;">${scores.chinese} / 120</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>数学</span>
+                                <span style="color:#a0c4ff;">${scores.math} / 100</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>英语</span>
+                                <span style="color:#a0c4ff;">${scores.english} / 100</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>历史</span>
+                                <span style="color:#a0c4ff;">${scores.history} / 70</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>物理</span>
+                                <span style="color:#a0c4ff;">${scores.physics} / 70</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>道法</span>
+                                <span style="color:#a0c4ff;">${scores.politics} / 50</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; grid-column:span 2;">
+                                <span>生地</span>
+                                <span style="color:#a0c4ff;">${scores.bio_geo} / 100</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); display:flex; justify-content:space-between; font-size:1.3rem;">
+                            <span>总分</span>
+                            <span style="color:#ffd966; font-weight:700;">${totalScore} / 610</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex; gap:15px; justify-content:center;">
+                        <button class="btn btn-primary" onclick="location.reload()">🔄 重新开始</button>
+                        <button class="btn" onclick="window.location.href='index.html'">🏠 返回首页</button>
+                    </div>
+                    
+                    <p style="margin-top:20px; opacity:0.5; font-size:0.8rem;">
+                        智力: ${Math.round(gameState.stats.int)} | 
+                        体质: ${Math.round(gameState.stats.str)} | 
+                        快乐: ${Math.round(gameState.stats.hap)} | 
+                        颜值: ${Math.round(gameState.stats.cha)}
+                    </p>
+                </div>
+            `;
+            document.body.appendChild(panel);
+        }
+
+        // ==================== 保存游戏状态 ====================
+        function saveGameState() {
+            localStorage.setItem('longgao_current_game', JSON.stringify(gameState));
+        }
+        function updateStatsDisplay() {
+            document.getElementById('stat-int').textContent = Math.round(gameState.stats.int);
+            document.getElementById('stat-str').textContent = Math.round(gameState.stats.str);
+            document.getElementById('stat-hap').textContent = Math.round(gameState.stats.hap);
+            document.getElementById('stat-cha').textContent = Math.round(gameState.stats.cha);
+            
+            // 保存进度
+            saveGameState();
+        }
+
+        function updateDayDisplay() {
+            document.getElementById('currentDay').textContent = gameState.day;
+        }
+
+        // 修改 addLog 支持 chain 类型
+        function addLog(text, type = 'normal') {
+            const log = document.getElementById('eventLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = text;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            // 保留最近20条
+            if (log.children.length > 20) {
+                log.removeChild(log.children[0]);
+            }
+        }
+
+        // ==================== 自动模式 ====================
+        function toggleAutoMode() {
+            autoMode = document.getElementById('autoMode').checked;
+            
+            if (autoMode) {
+                addLog('🔄 自动模式已开启', 'system');
+                document.getElementById('autoHint').textContent = '🔄 自动模式';
+                
+                // 检查当前事件是否可以自动继续
+                checkAutoContinue();
+            } else {
+                addLog('⏸ 自动模式已关闭', 'system');
+                document.getElementById('autoHint').textContent = '';
+                
+                if (autoTimer) {
+                    clearTimeout(autoTimer);
+                    autoTimer = null;
+                }
+            }
+        }
+
+
+        function checkAutoContinue() {
+            if (!autoMode || gameEnded) return;
+            
+            const hasOptions = currentEvent && currentEvent.options && currentEvent.options.length > 0;
+            
+            if (!hasOptions) {
+                // 无选项事件，检查是否已经显示了继续按钮
+                
+                const continueDiv = document.getElementById('eventContinue');
+                if (continueDiv.style.display === 'block') {
+                    // 自动点击继续
+                    setTimeout(() => handleContinue(), 300);
+                }
+            } else {
+                document.getElementById('autoHint').textContent = '⏸ 自动暂停，请选择';
+            }
+        }
+
+        // ==================== 修改 goToNextDay ====================
+        function goToNextDay() {
+            if (gameEnded) return;
+            
+
+
+            gameState.day++;
+            updateDayDisplay();
+            
+            // 第100天是中考日
+            if (gameState.day === 100) {
+                // 显示中考事件
+                showExamEvent();
+            } else if (gameState.day > 100) {
+                endGame();
+            } else {
+                pickNextEvent();
+            }
+        }
+
+        // ==================== 显示中考事件 ====================
+        function showExamEvent() {
+            gameEnded = true;  // 先暂停自动模式
+            
+            const examEvent = {
+                id: 'final_exam',
+                type: 'exam',
+                name: '🏁 中考',
+                desc: '今天是中考的日子！三年的努力就在这一刻...',
+                options: null,
+                autoEffects: []
+            };
+            
+            currentEvent = examEvent;
+            displayEvent();
+            
+            // 显示中考提示
+            document.getElementById('eventTitle').textContent = examEvent.name;
+            document.getElementById('eventDesc').textContent = examEvent.desc;
+            
+            const optionsDiv = document.getElementById('eventOptions');
+            const continueDiv = document.getElementById('eventContinue');
+            
+            optionsDiv.style.display = 'none';
+            continueDiv.style.display = 'block';
+            
+            const continueBtn = document.getElementById('continueBtn');
+            const newBtn = continueBtn.cloneNode(true);
+            continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+            newBtn.textContent = '📝 查看成绩';
+            newBtn.addEventListener('click', () => {
+                endGame();
+            });
+            
+            addLog('📚 中考开始！祝你好运！', 'exam');
+        }
+        function goBack() {
+            if (confirm('确定要返回吗？当前进度将保存。')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==================== 星空背景 ====================
+        function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                stars = [];
+                for (let i = 0; i < 100; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 2 + 0.5,
+                        b: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+            
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0a0f1e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                stars.forEach(s => {
+                    const twinkle = Math.sin(Date.now() * 0.002 + s.x) * 0.2 + 0.8;
+                    ctx.fillStyle = `rgba(255, 240, 200, ${s.b * twinkle})`;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(draw);
+            }
+            
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        }
+
+        function showAchievementToast(ach) {
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `<strong>🏆 成就解锁！</strong><br>${ach.name}<br><small>${ach.desc}</small>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+            
+            addLog(`🏆 获得成就：${ach.name}`, 'achievement');
+        }
+
+        // ==================== 重置游戏（新游戏时清除记录） ====================
+        function resetGame() {
+            gameState = {
+                day: 1,
+                stats: { int: 50, str: 50, hap: 50, cha: 50 },
+                talents: [],
+                achievements: [],
+                completedEvents: [],
+                history: []
+            };
+            localStorage.removeItem('longgao_current_game');
+        }
+
+        // ==================== 综合评分系统 ====================
+        function calculateOverallScore() {
+            const int = gameState.stats.int;
+            const str = gameState.stats.str;
+            const hap = gameState.stats.hap;
+            const cha = gameState.stats.cha;
+            
+            // 方式1：基础加权分
+            const weightedScore = int * 3.0 + str * 2.5 + hap * 2.0 + cha * 2.5;
+            
+            // 方式2：均衡奖励（属性越均衡越高）
+            const avg = (int + str + hap + cha) / 4;
+            const variance = (Math.pow(int - avg, 2) + Math.pow(str - avg, 2) + 
+                            Math.pow(hap - avg, 2) + Math.pow(cha - avg, 2)) / 4;
+            const stdDev = Math.sqrt(variance);
+            const balanceBonus = Math.max(0, 200 - stdDev * 5);
+            
+            // 方式3：特长奖励（最高属性额外加分）
+            const maxStat = Math.max(int, str, hap, cha);
+            const specialtyBonus = maxStat * 2.0;
+            
+            // 方式4：最低保障（最低属性不能太低，否则扣分）
+            const minStat = Math.min(int, str, hap, cha);
+            const minPenalty = 0;
+            
+            // 方式5：组合加成
+            // 智体双修：智力+体质
+            const intStrCombo = Math.min(int, str) * 1.5;
+            // 才貌双全：智力+颜值
+            const intChaCombo = Math.min(int, cha) * 1.5;
+            // 身心健康：体质+快乐
+            const strHapCombo = Math.min(str, hap) * 1.5;
+            // 社交魅力：快乐+颜值
+            const hapChaCombo = Math.min(hap, cha) * 1.5;
+            const comboBonus = intStrCombo + intChaCombo + strHapCombo + hapChaCombo;
+            
+            // 方式6：天赋加成（如果有选天赋）
+            const talentBonus = gameState.talents.length * 50;
+            
+            // 方式7：成就加成
+            const achievementBonus = gameState.achievements.length * 30;
+            
+            // 最终综合得分
+            const overallScore = Math.round(
+                weightedScore + 
+                balanceBonus + 
+                specialtyBonus - 
+                minPenalty + 
+                comboBonus + 
+                talentBonus + 
+                achievementBonus
+            );
+            
+            return {
+                total: overallScore,
+                breakdown: {
+                    weighted: Math.round(weightedScore),
+                    balance: Math.round(balanceBonus),
+                    specialty: Math.round(specialtyBonus),
+                    minPenalty: -Math.round(minPenalty),
+                    combo: Math.round(comboBonus),
+                    talent: talentBonus,
+                    achievement: achievementBonus
+                }
+            };
+        }
+
+        // ==================== 评分等级 ====================
+        function getScoreRank(score) {
+            if (score >= 1500) return { rank: '🏆 传奇', color: '#c084fc', desc: '你的龙高生涯堪称传奇！' };
+            if (score >= 1200) return { rank: '💎 史诗', color: '#f87171', desc: '你的人生精彩纷呈，令人羡慕！' };
+            if (score >= 1000) return { rank: '⭐ 卓越', color: '#fb923c', desc: '你度过了一段非常充实的时光！' };
+            if (score >= 800) return { rank: '📚 优秀', color: '#60a5fa', desc: '你的高中生活相当不错！' };
+            if (score >= 400) return { rank: '🌱 平凡', color: '#a0a0a0', desc: '平平淡淡才是真。' };
+            return { rank: '😔 遗憾', color: '#888888', desc: '或许有些遗憾，但人生还长...' };
+        }
+
+        // ==================== 修改 showEndingPanel ====================
+        function showEndingPanel(ending, endingDesc, scores, totalScore) {
+            const overallData = calculateOverallScore();
+            const rank = getScoreRank(overallData.total);
+            
+            const panel = document.createElement('div');
+            panel.className = 'ending-panel';
+            panel.innerHTML = `
+                <div class="ending-content">
+                    <div class="ending-title">${ending}</div>
+                    <p style="margin-bottom:20px; opacity:0.9;">${endingDesc}</p>
+                    
+                    <!-- 综合评分卡片 -->
+                    <div style="background:rgba(0,0,0,0.3); border-radius:20px; padding:20px; margin:20px 0; border:2px solid ${rank.color};">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:15px;">
+                            <span style="font-size:1.3rem; color:${rank.color};">${rank.rank}</span>
+                            <span style="font-size:2.5rem; font-weight:700; color:${rank.color};">${overallData.total}</span>
+                        </div>
+                        <p style="opacity:0.8; margin-bottom:15px;">${rank.desc}</p>
+                        
+                        <!-- 分数构成（可折叠） -->
+                        <details style="cursor:pointer;">
+                            <summary style="padding:10px; background:rgba(255,255,255,0.05); border-radius:10px; margin-bottom:10px;">
+                                📈 评分详情
+                            </summary>
+                            <div style="padding:10px; font-size:0.9rem;">
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>📊 属性加权</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.weighted}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>⚖️ 均衡奖励</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.balance}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>🌟 特长奖励</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.specialty}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>🔗 组合加成</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.combo}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>🎯 天赋加成</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.talent}</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; padding:5px 0;">
+                                    <span>🏆 成就加成</span>
+                                    <span style="color:#a0c4ff;">+${overallData.breakdown.achievement}</span>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                    
+                    <!-- 中考成绩单 -->
+                    <div style="background:rgba(0,0,0,0.2); border-radius:16px; padding:20px; margin:20px 0;">
+                        <h3 style="margin-bottom:15px; color:#ffd966;">📊 中考成绩单</h3>
+                        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px 20px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>语文</span>
+                                <span style="color:#a0c4ff;">${scores.chinese} / 120</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>数学</span>
+                                <span style="color:#a0c4ff;">${scores.math} / 100</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>英语</span>
+                                <span style="color:#a0c4ff;">${scores.english} / 100</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>历史</span>
+                                <span style="color:#a0c4ff;">${scores.history} / 70</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>物理</span>
+                                <span style="color:#a0c4ff;">${scores.physics} / 70</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span>道法</span>
+                                <span style="color:#a0c4ff;">${scores.politics} / 50</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; grid-column:span 2;">
+                                <span>生地</span>
+                                <span style="color:#a0c4ff;">${scores.bio_geo} / 100</span>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); display:flex; justify-content:space-between; font-size:1.3rem;">
+                            <span>中考总分</span>
+                            <span style="color:#ffd966; font-weight:700;">${totalScore} / 610</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex; gap:15px; justify-content:center;">
+                        <button class="btn btn-primary" onclick="location.reload()">🔄 重新开始</button>
+                        <button class="btn" onclick="window.location.href='index.html'">🏠 返回首页</button>
+                    </div>
+                    
+                    <p style="margin-top:20px; opacity:0.5; font-size:0.8rem;">
+                        智力: ${Math.round(gameState.stats.int)} | 
+                        体质: ${Math.round(gameState.stats.str)} | 
+                        快乐: ${Math.round(gameState.stats.hap)} | 
+                        颜值: ${Math.round(gameState.stats.cha)}
+                    </p>
+                </div>
+            `;
+            document.body.appendChild(panel);
+        }
+        // ==================== 天赋检查函数 ====================
+        function hasTalent(talentId) {
+            return gameState.talents && gameState.talents.includes(talentId);
+        }
+
+        // 检查是否拥有任意一个天赋
+        function hasAnyTalent(talentIds) {
+            return gameState.talents && talentIds.some(id => gameState.talents.includes(id));
+        }
+
+        // 检查是否拥有所有天赋
+        function hasAllTalents(talentIds) {
+            return gameState.talents && talentIds.every(id => gameState.talents.includes(id));
+        }
+
+        // 挂载到 window，让 condition 可以访问
+        window.hasTalent = hasTalent;
+        window.hasAnyTalent = hasAnyTalent;
+        window.hasAllTalents = hasAllTalents;
+
+        function init() {
+            initStarfield();
+            loadGameData();
+            
+            const autoModeCheckbox = document.getElementById('autoMode');
+            if (autoModeCheckbox) {
+                autoModeCheckbox.addEventListener('change', toggleAutoMode);
+            }
+            
+            loadGameDataFiles();
+        }
+
+        // 等待 DOM 加载完成后再初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+}
+    </script>
+</body>
+</html>

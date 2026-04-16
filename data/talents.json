@@ -1,0 +1,221 @@
+{
+  "talents": [
+    {
+      "id": "t001",
+      "name": "天选之子",
+      "quality": "legendary",
+      "desc": "你生而不凡，命运眷顾",
+      "effects": {
+        "type": "passive",
+        "rules": [
+          { "trigger": "start", "action": "add", "target": "int", "value": 15 },
+          { "trigger": "start", "action": "add", "target": "str", "value": 10 },
+          { "trigger": "start", "action": "add", "target": "hap", "value": 10 },
+          { "trigger": "start", "action": "add", "target": "cha", "value": 15 }
+        ]
+      },
+      "once": false
+    },
+    {
+      "id": "t002",
+      "name": "学神附体",
+      "quality": "legendary",
+      "desc": "过目不忘，举一反三",
+      "effects": {
+        "type": "passive",
+        "rules": [
+          { "trigger": "start", "action": "add", "target": "int", "value": 25 },
+          { "trigger": "study", "action": "multiply", "target": "int_gain", "value": 2.0 }
+        ]
+      },
+      "once": false
+    },
+    {
+        "id": "talent_007",
+        "name": "运动健将",
+        "desc": "初始体质+12，运动效果×2",
+        "quality": "epic",
+        "effects": {
+            "rules": [
+                { "trigger": "start", "action": "add", "target": "str", "value": 12 },
+                { "trigger": "sports", "action": "multiply", "target": "str", "value": 2 }
+            ]
+        }
+    },
+    {
+        "id": "talent_sickly",
+        "name": "天生有病",
+        "desc": "体质较弱，免修体育, 体质-5",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "subtract", "target": "str", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "talent_singing",
+        "name": "天籁之音",
+        "desc": "你有一副好嗓子，唱歌特别好听。参加歌友会时颜值额外+5。",
+        "quality": "rare",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "cha", "value": 5 },
+            { "trigger": "start", "action": "add", "target": "hap", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "talent_ignore_rules",
+        "name": "无视校规",
+        "desc": "校规？那是什么？违纪扣分对你毫无心理负担。初始快乐+5。",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "hap", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "talent_strong_immune",
+        "name": "免疫力强",
+        "desc": "你的免疫系统格外强大，很少生病。初始体质+8。",
+        "quality": "rare",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "str", "value": 8 }
+            ]
+        }
+    },
+    {
+        "id": "talent_no_reward",
+        "name": "不要奖励",
+        "desc": "你从不接受任何形式的奖励，做好事不留名。初始快乐+3，智力+2。",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "hap", "value": 3 },
+            { "trigger": "start", "action": "add", "target": "int", "value": 2 }
+            ]
+        }
+    },
+    {
+        "id": "talent_natural_manners",
+        "name": "天生家教",
+        "desc": "你从小家教严格，举止得体。但越是这样，偶尔的'反家教'行为越让人印象深刻。初始智力+3，颜值-3。",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 3 },
+            { "trigger": "start", "action": "subtract", "target": "cha", "value": 3 }
+            ]
+        }
+    },
+    {
+        "id": "talent_born_for_each_other",
+        "name": "天生一对",
+        "desc": "你身上有种特殊的吸引力，总能吸引到对的人。看月亮事件概率提升50%。初始颜值+5，快乐+5。",
+        "quality": "epic",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "cha", "value": 5 },
+            { "trigger": "start", "action": "add", "target": "hap", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "tang",
+        "name": "TANG",
+        "desc": "这个天赋让你被嘲笑的概率提升50%",
+        "quality": "epic",
+        "effects": {
+            "rules": []
+        }
+    },
+    {
+        "id": "talent_math_lover",
+        "name": "痴迷数学",
+        "desc": "你沉迷于数学的世界无法自拔。初始智力+5，但总是忘记写其他作业，作业写不完事件概率提升100%。",
+        "quality": "rare",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "talent_gentleman",
+        "name": "正人君子",
+        "desc": "你品行端正，为人正直，是大家眼中的好学生。初始智力+1。但是你一定会拒绝老师的奖励，而且作业没写完没有抄作业选项",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 1 }
+            ]
+        }
+    },
+    {
+        "id": "talent_disgentleman",
+        "name": "我爱奖励",
+        "desc": "你对老师的奖励十分看中，如果有奖励一定会接受，但初始颜值 -2",
+        "quality": "common",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "subtract", "target": "cha", "value": -2 }
+            ]
+        }
+    },
+    {
+        "id": "talent_love_master",
+        "name": "情场高手",
+        "desc": "你天生懂得如何吸引异性，在感情方面如鱼得水。初始颜值+5。情感事件发生概率+50%",
+        "quality": "rare",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "cha", "value": 5 }
+            ]
+        }
+    },
+    {
+        "id": "talent_natural_genius",
+        "name": "天生学霸",
+        "desc": "你天资聪颖，学习能力超群。初始智力+10。",
+        "quality": "epic",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 10 }
+            ]
+        }
+    },
+    {
+        "id": "talent_competitive_programming",
+        "name": "信竞大神",
+        "desc": "你的编程能力出类拔萃，逻辑思维缜密，是信息学竞赛的一把好手。初始智力+4。可能出现中午午训事件",
+        "quality": "rare",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 4 }
+            ]
+        }
+    },
+    {
+        "id": "talent_three_good",
+        "name": "三好学生",
+        "desc": "你德智体美劳全面发展。除颜值外全属性+5，获奖概率提升50%，作业写不完概率降低50%。",
+        "quality": "epic",
+        "effects": {
+            "rules": [
+            { "trigger": "start", "action": "add", "target": "int", "value": 5 },
+            { "trigger": "start", "action": "add", "target": "str", "value": 5 },
+            { "trigger": "start", "action": "add", "target": "hap", "value": 5 }
+            ]
+        }
+    }
+  ],
+  "qualities": {
+    "legendary": { "name": "传说", "color": "#c084fc", "weight": 5 },
+    "epic": { "name": "史诗", "color": "#f87171", "weight": 15 },
+    "rare": { "name": "稀有", "color": "#fb923c", "weight": 30 },
+    "common": { "name": "普通", "color": "#60a5fa", "weight": 50 }
+  }
+}
