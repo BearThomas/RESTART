@@ -463,7 +463,10 @@
         function loadGameData() {
             const saved = localStorage.getItem('longgao_classic_save');
             if (saved) {
-                const data = JSON.parse(saved);
+                data = JSON.parse(saved);
+                if(data.flag == false) window.location.href = 'index.html';
+                data.flag = false;
+                localStorage.setItem('longgao_classic_save', JSON.stringify(data));
                 gameState.stats = data.finalStats || data.stats || { int: 50, str: 50, hap: 50, cha: 50 };
                 gameState.talents = data.talents || [];
                 gameState.day = data.day || 1;

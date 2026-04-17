@@ -305,8 +305,199 @@
                 letter-spacing: 1px;
             }
         }
+        /* 版本弹窗样式 */
+        .version-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .contact-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .version-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .version-modal-content {
+            position: relative;
+            max-width: 450px;
+            width: 90%;
+            background: rgba(20, 35, 60, 0.95);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(180, 210, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .version-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(180, 210, 255, 0.2);
+        }
+
+        .version-modal-header h2 {
+            font-size: 1.5rem;
+            color: #ffd966;
+            margin: 0;
+        }
+
+        .version-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .version-modal-close:hover {
+            background: rgba(255, 100, 100, 0.3);
+        }
+
+        .version-modal-body {
+            padding: 25px;
+        }
+
+        .version-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .version-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffd966;
+            text-shadow: 0 0 20px rgba(255, 215, 100, 0.3);
+        }
+
+        .version-date {
+            font-size: 0.9rem;
+            color: #8aa0c0;
+            margin-top: 5px;
+        }
+
+        .version-desc {
+            text-align: center;
+            color: #b0c8e8;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .version-update {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .version-update h3 {
+            font-size: 1rem;
+            color: #a0c4ff;
+            margin-bottom: 10px;
+        }
+
+        .version-update ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .version-update li {
+            padding: 5px 0;
+            color: #c0d8f0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .version-update li:last-child {
+            border-bottom: none;
+        }
+
+        .version-footer {
+            text-align: center;
+            color: #6a8ab0;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
+<!-- 版本信息弹窗 -->
+<div class="version-modal" id="versionModal" style="display: none;">
+    <div class="version-modal-overlay" onclick="closeVersionModal()"></div>
+    <div class="version-modal-content">
+        <div class="version-modal-header">
+            <h2>龙高重开模拟器 1.0.0 版本</h2>
+            <button class="version-modal-close" onclick="closeVersionModal()">&times;</button>
+        </div>
+        <div class="version-modal-body">
+            <div class="version-info">
+                <div class="version-number">v1.0.0</div>
+                <div class="version-date">2024-01-15</div>
+            </div>
+            <div class="version-desc">
+                <p>经典模式 · 天赋抽选 · 成就系统</p>
+                <p>100天龙高生涯，体验最真实的校园生活</p>
+            </div>
+            <div class="version-update">
+                <h3>更新日志</h3>
+                <ul>
+                    <li>新增天赋系统，开局抽取3个天赋</li>
+                    <li>新增成就系统，永久保存</li>
+                    <li>名人模式，扮演你喜欢的角色</li>
+                </ul>
+            </div>
+            <div class="version-footer">
+                <span>Made with ❤️ by 龙高人</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contact-modal" id="contactModal" style="display: none;">
+    <div class="version-modal-overlay" onclick="closeContactModal()"></div>
+    <div class="version-modal-content" style="display: flex; justify-content: center;">
+        <iframe src="https://tally.so/r/QKBDaA" style="width:95%; height:600px; border:none; border-radius: 10px; margin: 10px;"></iframe>
+    </div>
+</div>
 <body>
 
     <canvas id="starfield"></canvas>
@@ -329,10 +520,10 @@
     <div class="bottom-menu-wrapper">
         <div class="glass-menubar" id="glassMenubar">
             <div class="menu-buttons" id="menuButtons">
-                <button class="menu-item" id="rankBtn">🏆 排行榜</button>
-                <button class="menu-item" id="achievementBtn">✨ 成就</button>
-                <button class="menu-item" id="settingsBtn">⚙️ 设置</button>
-                <button class="menu-item" id="aboutBtn">ℹ️ 关于我的</button>
+                <button class="menu-item" id="rankBtn">排行榜</button>
+                <button class="menu-item" id="achievementBtn">成就</button>
+                <button class="menu-item" id="settingsBtn">版本</button>
+                <button class="menu-item" id="aboutBtn">联络</button>
             </div>
             <div class="toggle-bar-btn" id="toggleMenuBtn">
                 <span>☰</span>
@@ -345,13 +536,59 @@
     </div>
 
     <script>
+        // 显示版本弹窗
+        function showVersionModal() {
+            document.getElementById('versionModal').style.display = 'flex';
+        }
+
+        // 关闭版本弹窗
+        function closeVersionModal() {
+            document.getElementById('versionModal').style.display = 'none';
+        }
+
+        // 点击遮罩关闭
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('version-modal-overlay')) {
+                closeVersionModal();
+            }
+        });
+
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVersionModal();
+            }
+        });
+        function showContactModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        // 关闭版本弹窗
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        // 点击遮罩关闭
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('contact-modal-overlay')) {
+                closeContactModal();
+            }
+        });
+
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
         (function(){
             "use strict";
 
             // ---------- 星空绘制 (优化性能) ----------
             const canvas = document.getElementById('starfield');
             const ctx = canvas.getContext('2d');
-            
+            const version = "1.0.0";
+
             let stars = [];
             let animationFrame = null;
             
@@ -361,6 +598,16 @@
                 COLOR_VARIATION: true,
                 NEBULA_OVERLAY: true
             };
+            const data = localStorage.getItem('longgao_classic_version');
+            console.log('当前版本：', version, '本地版本：', data);
+            if (data == null){
+                showVersionModal2();
+                localStorage.setItem('longgao_classic_version', version);
+            }
+            else if (data != version){
+                showVersionModal();
+                localStorage.setItem('longgao_classic_version', version);
+            }
 
             const rand = (min, max) => Math.random() * (max - min) + min;
             
@@ -518,11 +765,11 @@
                 window.location.href = 'celebrity.html';
             });
             document.getElementById('rankBtn').addEventListener('click', () => showComingSoon('排行榜'));
-            document.getElementById('achievementBtn').addEventListener('click', () => showComingSoon('成就'));
-            document.getElementById('settingsBtn').addEventListener('click', () => showComingSoon('设置'));
-            document.getElementById('aboutBtn').addEventListener('click', () => {
-                alert('🏫 龙高重开模拟器 v0.2\n星辰为证 · 再启征程');
+            document.getElementById('achievementBtn').addEventListener('click', () => {
+                window.location.href = 'achievements.html';
             });
+            document.getElementById('settingsBtn').addEventListener('click', () => showVersionModal());
+            document.getElementById('aboutBtn').addEventListener('click', () => showContactModal());
 
             canvas.addEventListener('contextmenu', (e) => e.preventDefault());
             

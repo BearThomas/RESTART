@@ -4,8 +4,36 @@
       "id": "zhongsituo",
       "name": "钟思拓",
       "desc": "反家教创始人，痴迷数学",
-      "stats": { "int": 120, "str": 60, "hap": 100, "cha": 80 },
+      "stats": { "int": 80, "str": 60, "hap": 60, "cha": 20 },
       "talents": ["talent_gentleman", "talent_natural_manners", "talent_math_lover"]
+    },
+    {
+      "id": "zhaobochun",
+      "name": "赵泊淳",
+      "desc": "神秘",
+      "stats": { "int": 50, "str": 50, "hap": 60, "cha": 40 },
+      "talents": ["talent_strong_immune", "tang", "talent_three_good"]
+    },
+    {
+      "id": "yuzichen",
+      "name": "余梓晨",
+      "desc": "三班文臣",
+      "stats": { "int": 70, "str": 20, "hap": 50, "cha": 60 },
+      "talents": ["talent_ignore_rules", "talent_math_lover", "talent_natural_genius"]
+    },
+    {
+      "id": "lijiayi",
+      "name": "李嘉熠",
+      "desc": "三班武将（总点数超群）",
+      "stats": { "int": 50, "str": 80, "hap": 70, "cha": 90 },
+      "talents": ["talent_ignore_rules", "t002", "talent_007"]
+    },
+    {
+      "id": "heyujun",
+      "name": "何雨峻",
+      "desc": "无法评价",
+      "stats": { "int": 60, "str": 30, "hap": 60, "cha": 50 },
+      "talents": ["tang", "talent_singing", "talent_disgentleman"]
     }
   ]
 }

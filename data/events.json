@@ -73,7 +73,17 @@
   "once": false,
   "options": null,
   "autoEffects": [{ "str": -2 }],
-  "weight": 8
+  "weight": 4
+},
+{
+  "id": "event_canteen_success",
+  "type": "story",
+  "name": "抢饭成功",
+  "desc": "中午下课铃一响，你以百米冲刺的速度奔向食堂，成功抢饭！",
+  "once": false,
+  "options": null,
+  "autoEffects": [{ "hap": 2 }],
+  "weight": 4
 },
 {
   "id": "event_shower_queue",
@@ -87,7 +97,21 @@
     { "hap": -3 },
     { "cha": -2 }
   ],
-  "weight": 10
+  "weight": 5
+},
+{
+  "id": "event_shower_queue_2",
+  "type": "story",
+  "name": "抢到洗澡位",
+  "desc": "放学后你冲向宿舍，成功抢到洗澡位",
+  "once": false,
+  "options": null,
+  "condition": "day > 6",
+  "autoEffects": [
+    { "hap": 3 },
+    { "cha": 2 }
+  ],
+  "weight": 5
 },
 {
   "id": "event_oath_mistake",
@@ -621,7 +645,7 @@
   "name": "有人在看你",
   "desc": "上课时你无意间转头，发现隔壁组的异性同学正偷偷看你。四目相对的瞬间，对方慌忙移开视线，你的心跳漏了一拍……这堂课注定没法专心了。",
   "once": false,
-  "condition": "day > 6",
+  "condition": "day > 6 && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 2 },
@@ -651,7 +675,7 @@
   "name": "有人在看你",
   "desc": "上课时你无意间转头，发现隔壁组的异性同学正偷偷看你。四目相对的瞬间，对方慌忙移开视线，你的心跳漏了一拍……这堂课注定没法专心了。",
   "once": false,
-  "condition": "day > 6 && hasTalent('talent_love_master')",
+  "condition": "day > 6 && hasTalent('talent_love_master') && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 2 },
@@ -671,7 +695,20 @@
   "autoEffects": [
     { "hap": -2 }
   ],
-  "weight": 20
+  "weight": 5
+},
+{
+  "id": "event_phone_queue_success",
+  "type": "story",
+  "name": "成功抢电话机",
+  "desc": "下课铃一响，你以百米冲刺的速度奔向电话机，你是第一个！",
+  "once": false,
+  "condition": "day > 6",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 }
+  ],
+  "weight": 5
 },
 {
   "id": "event_canteen_delicious",
@@ -748,7 +785,7 @@
   "name": "和喜欢的异性聊天",
   "desc": "你鼓起勇气和Ta聊了几句，没想到Ta回应得很热情。你们从作业聊到兴趣爱好，时间过得飞快。心里像吃了蜜一样甜，整个人都容光焕发！",
   "once": false,
-  "condition": "day > 6",
+  "condition": "day > 6 && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 10 },
@@ -762,7 +799,7 @@
   "name": "和喜欢的异性聊天",
   "desc": "你鼓起勇气和Ta聊了几句，没想到Ta回应得很热情。你们从作业聊到兴趣爱好，时间过得飞快。心里像吃了蜜一样甜，整个人都容光焕发！",
   "once": false,
-  "condition": "day > 6 && hasTalent('talent_love_master')",
+  "condition": "day > 6 && hasTalent('talent_love_master') && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 10 },
@@ -846,7 +883,7 @@
   "condition": "day > 6 && hasTalent('talent_ignore_rules')",
   "options": null,
   "autoEffects": [],
-  "weight": 5
+  "weight": 10
 },
 {
   "id": "event_sick",
@@ -973,7 +1010,7 @@
   "name": "被同学叫去看月亮",
   "desc": "你猜……",
   "once": true,
-  "condition": "day > 6 && !hasTalent('talent_born_for_each_other')",
+  "condition": "day > 6 && !hasTalent('talent_born_for_each_other') && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 5 },
@@ -988,7 +1025,7 @@
   "name": "被同学叫去看月亮",
   "desc": "你猜……",
   "once": true,
-  "condition": "day > 6 && !hasTalent('talent_love_master')",
+  "condition": "day > 6 && !hasTalent('talent_love_master') && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 5 },
@@ -1003,7 +1040,7 @@
   "name": "被同学叫去看月亮",
   "desc": "你猜……",
   "once": true,
-  "condition": "day > 6 && hasTalent('talent_born_for_each_other')",
+  "condition": "day > 6 && hasTalent('talent_born_for_each_other') && !hasTalent('talent_natural_manners')",
   "options": null,
   "autoEffects": [
     { "hap": 5 },
@@ -1370,5 +1407,185 @@
   ],
   "achievement": "a_study_model",
   "weight": 8
+},
+{
+  "id": "event_hair_violation",
+  "type": "story",
+  "name": "头发不合格",
+  "desc": "今天仪容仪表检查，你的头发长度/发型不符合学校规定，被值日老师记了名字。班主任找你谈话，要求限期整改。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -3 },
+    { "cha": -2 }
+  ],
+  "weight": 2
+},
+{
+  "id": "event_hair_violation_2",
+  "type": "story",
+  "name": "头发不合格",
+  "desc": "今天仪容仪表检查，你的头发长度/发型不符合学校规定，被值日老师记了名字。班主任找你谈话，要求限期整改。可是你并不在意",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 5
+},
+{
+  "id": "event_slippers",
+  "type": "story",
+  "name": "穿拖鞋上课",
+  "desc": "早上起晚了，你匆忙中穿着拖鞋就冲到了教室。结果被教导主任抓个正着，当着全班的面批评了一顿。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -4 },
+    { "cha": -3 }
+  ],
+  "weight": 1
+},
+{
+  "id": "event_slippers_ignored",
+  "type": "story",
+  "name": "穿拖鞋上课",
+  "desc": "你穿着拖鞋大摇大摆走进教室，教导主任瞪了你一眼，你回以一个灿烂的微笑。主任摇摇头走了——拿你没办法。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 10
+},
+{
+  "id": "event_phone_confiscated",
+  "type": "story",
+  "name": "手机被没收",
+  "desc": "课间你偷偷拿出手机玩，被路过的班主任一眼看到。手机被没收了，还要写1000字检讨，期末才能拿回来……",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -8 }
+  ],
+  "weight": 3
+},
+{
+  "id": "event_phone_confiscated_ignored",
+  "type": "story",
+  "name": "手机被没收",
+  "desc": "班主任没收了你的手机，你面不改色地从书包里掏出另一部备用机继续玩。班主任：'……'",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 9
+},
+{
+  "id": "event_talking_in_class",
+  "type": "story",
+  "name": "上课讲话",
+  "desc": "你和同桌聊得太投入，完全没注意到老师已经停下来盯着你们。'后面那两位同学，要不要上来讲？' 全班哄堂大笑。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -2 },
+    { "cha": -1 },
+    { "int": -1 }
+  ],
+  "weight": 3
+},
+{
+  "id": "event_talking_in_class_ignored",
+  "type": "story",
+  "name": "上课讲话",
+  "desc": "你和同桌聊得正欢，老师点名批评。你面不改色地说：'老师，我有意见' 老师愣了一下^",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 6
+},
+{
+  "id": "event_late_punishment",
+  "type": "story",
+  "name": "迟到罚站",
+  "desc": "早读铃响了你才冲进校门，被值日生记了迟到。班主任让你在走廊罚站一节课，路过的同学都用异样的眼光看你。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -5 },
+    { "cha": -2 },
+    { "int": -2 }
+  ],
+  "weight": 3
+},
+{
+  "id": "event_late_punishment_ignored",
+  "type": "story",
+  "name": "迟到？不存在",
+  "desc": "你又迟到了，班主任正要发作，你：'我有意见' ……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [],
+  "weight": 10
+},
+{
+  "id": "event_eating_in_class",
+  "type": "story",
+  "name": "教室吃零食",
+  "desc": "你偷偷在课桌下拆开一包薯片，刚吃两口就被巡查老师发现。零食被没收，还被罚打扫教室一周。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -3 },
+    { "str": 1 }
+  ],
+  "weight": 3
+},
+{
+  "id": "event_eating_in_class_ignored",
+  "type": "story",
+  "name": "教室吃零食",
+  "desc": "你正大光明地在教室里吃薯片，巡查老师路过时你递过去一片：'老师尝尝？' ……",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 }
+  ],
+  "weight": 9
+},
+{
+  "id": "event_dorm_talking",
+  "type": "story",
+  "name": "宿舍夜谈被抓",
+  "desc": "熄灯后你和室友聊得正嗨，宿管阿姨突然推门而入。宿舍被扣了纪律分，你们都被叫出去站了半小时。",
+  "once": false,
+  "condition": "day > 6 && !hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": -3 },
+    { "str": -1 }
+  ],
+  "weight": 2
+},
+{
+  "id": "event_dorm_talking_ignored",
+  "type": "story",
+  "name": "宿舍夜谈",
+  "desc": "宿管阿姨推门进来，你立刻装睡，还发出了均匀的呼噜声。阿姨看了一眼，轻轻关上门走了。等人走远，你们继续聊。",
+  "once": false,
+  "condition": "day > 6 && hasTalent('talent_ignore_rules')",
+  "options": null,
+  "autoEffects": [
+    { "hap": 2 }
+  ],
+  "weight": 6
 }
 ]
