@@ -198,13 +198,13 @@
             background: rgba(60, 100, 160, 0.5);
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             .container {
-                padding: 16px;
+                padding: 18px;
             }
 
             .header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .header p {
@@ -213,47 +213,47 @@
 
             .celebrities-grid {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                gap: 18px;
             }
 
             .celebrity-card {
-                padding: 18px;
+                padding: 20px;
             }
 
             .celebrity-name {
-                font-size: 1.4rem;
+                font-size: 1.45rem;
             }
 
             .celebrity-desc {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
 
             .celebrity-stats {
                 grid-template-columns: 1fr;
-                gap: 8px;
+                gap: 10px;
             }
 
             .action-bar {
                 flex-direction: column;
-                gap: 14px;
+                gap: 16px;
             }
 
             .btn {
                 width: 100%;
-                padding: 14px 0;
-                font-size: 1rem;
+                padding: 15px 0;
+                font-size: 1.05rem;
             }
 
             .back-btn {
-                top: 12px;
-                left: 12px;
+                top: 14px;
+                left: 14px;
                 padding: 8px 14px;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 560px) {
             .container {
-                padding: 12px;
+                padding: 14px;
             }
 
             .celebrity-card {
@@ -262,6 +262,15 @@
 
             .header h1 {
                 font-size: 1.8rem;
+            }
+
+            .celebrities-grid {
+                gap: 14px;
+            }
+
+            .btn {
+                font-size: 1rem;
+                letter-spacing: 3px;
             }
         }
     </style>
@@ -281,8 +290,8 @@
         <div class="celebrities-grid" id="celebritiesGrid"></div>
 
         <div class="action-bar">
-            <button class="btn" id="rerollBtn">🔄 重新抽取</button>
-            <button class="btn btn-primary" id="confirmBtn" disabled>✨ 开始游戏</button>
+            <button class="btn" id="rerollBtn">重新抽取</button>
+            <button class="btn btn-primary" id="confirmBtn" disabled>开始游戏</button>
         </div>
     </div>
 
@@ -349,10 +358,10 @@
                     <div class="celebrity-name">${celeb.name}</div>
                     <div class="celebrity-desc">${celeb.desc}</div>
                     <div class="celebrity-stats">
-                        <div class="stat-mini"><span>🧠 智力</span><span>${celeb.stats.int}</span></div>
-                        <div class="stat-mini"><span>💪 体质</span><span>${celeb.stats.str}</span></div>
-                        <div class="stat-mini"><span>😊 快乐</span><span>${celeb.stats.hap}</span></div>
-                        <div class="stat-mini"><span>✨ 颜值</span><span>${celeb.stats.cha}</span></div>
+                        <div class="stat-mini"><span>智力</span><span>${celeb.stats.int}</span></div>
+                        <div class="stat-mini"><span>体质</span><span>${celeb.stats.str}</span></div>
+                        <div class="stat-mini"><span>快乐</span><span>${celeb.stats.hap}</span></div>
+                        <div class="stat-mini"><span>颜值</span><span>${celeb.stats.cha}</span></div>
                     </div>
                     <div class="celebrity-talents">
                         ${talentsHtml || '<span style="opacity:0.5;">无特殊天赋</span>'}

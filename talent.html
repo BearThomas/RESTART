@@ -322,215 +322,82 @@
                 min-width: 100%;
             }
         }
-    </style>
-        }
-
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .talent-card {
-            animation: cardAppear 0.4s ease-out;
-        }
-
-        /* 响应式 */
-        @media (max-width: 900px) {
-            .talents-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 500px) {
-            .talents-grid {
-                grid-template-columns: 1fr;
-            }
-            .stats-panel {
-                gap: 15px;
-            }
-            .stat-value {
-                font-size: 1.5rem;
-                padding: 5px 12px;
-            }
-        }
-
-        /* 返回按钮 */
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 20;
-            padding: 10px 20px;
-            background: rgba(20, 40, 70, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(180, 210, 255, 0.2);
-            border-radius: 40px;
-            color: #c0d8ff;
+        .attr-btn{
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+        }
+        .attr-btn:disabled{
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.6);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: not-allowed;
+            transition: all 0.2s ease;
+        }
+        /* 1. 设置容器为 Flex 布局 */
+        .attr-sliders {
+            display: flex;
+            flex-direction: row;      /* 确保横向排列 */
+            justify-content: space-between; /* 在各项目之间留出相等间距 */
+            align-items: flex-start;  /* 顶部对齐 */
+            gap: 20px;                /* 设置项与项之间的最小间距 */
+            flex-wrap: wrap;          /* 响应式：如果屏幕太窄，自动换行 */
+            margin-top: 20px;
         }
 
-        .back-btn:hover {
-            background: rgba(60, 100, 160, 0.5);
-            transform: translateX(-3px);
+        /* 2. 让每个属性项占据相等的宽度 */
+        .attr-item {
+            flex: 1;                  /* 关键：让所有子项平分剩余空间 */
+            min-width: 150px;         /* 防止在小屏幕上被挤压得太窄 */
+            /* background: #f8f9fa;      可选：增加背景色便于观察布局 */
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;       /* 内容居中 */
         }
 
-        /* 属性分配面板 */
-        .attr-panel {
-            background: rgba(15, 30, 55, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(180, 210, 255, 0.2);
-            border-radius: 24px;
-            padding: 25px 30px;
-            margin: 20px 0 30px;
+        /* 3. 优化滑块控制区域 */
+        .attr-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
         }
 
-        .attr-header {
+        /* 4. 确保滑块在自己的容器内撑满宽度 */
+        .attr-slider {
+            width: 50%;
+            cursor: pointer;
+        }
+        .attr-item{
+            border: 1px solid rgba(122, 175, 255, 0.5);
+            border-radius: 12px;
+        }
+        
+         .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .attr-header{
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-
-        .attr-header h3 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: #c0d4f0;
-            letter-spacing: 2px;
-        }
-
-        .remain-points {
+        .remain-points{
             font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffd966;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 5px 20px;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 215, 100, 0.3);
-        }
-
-        .attr-sliders {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-
-        .attr-item {
-            text-align: center;
-        }
-
-        .attr-label {
-            font-size: 1rem;
-            color: #a0b8d8;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .attr-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #e0ecff;
-            margin-bottom: 10px;
-        }
-
-        .attr-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .attr-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(60, 100, 160, 0.4);
-            border: 1.5px solid rgba(180, 210, 255, 0.3);
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .attr-btn:hover {
-            background: rgba(100, 160, 240, 0.6);
-            border-color: rgba(220, 240, 255, 0.5);
-            transform: scale(1.1);
-        }
-
-        .attr-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .attr-slider {
-            flex: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(100, 150, 200, 0.3);
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .attr-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #80b0ff;
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 0 10px rgba(100, 180, 255, 0.5);
-        }
-
-        .reset-btn {
-            padding: 8px 20px;
-            background: rgba(100, 100, 150, 0.3);
-            border: 1px solid rgba(180, 210, 255, 0.2);
-            border-radius: 30px;
-            color: #c0d8ff;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-
-        .reset-btn:hover {
-            background: rgba(120, 140, 180, 0.5);
-        }
-
-        /* 分隔线 */
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(180, 210, 255, 0.3), transparent);
-            margin: 30px 0 10px;
-        }
-
-        /* 响应式 */
-        @media (max-width: 800px) {
-            .attr-sliders {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .attr-sliders {
-                grid-template-columns: 1fr;
-            }
+            color: #8aa0c0;
+            letter-spacing: 2px;
         }
     </style>
 </head>
@@ -567,12 +434,13 @@
         <!-- 属性自选面板 -->
         <div class="attr-panel">
             <div class="attr-header">
-                <h3>📊 分配属性点</h3>
+                <h3 style="font-size: 1.5rem;color:#c0d4f0;font-weight: normal;">分配属性点</h3>
                 <div class="remain-points">剩余: <span id="remainPoints">100</span></div>
+                <button class="btn" id="resetAttrBtn" style="padding: 10px 30px; font-size: 1rem;">重置属性</button>
             </div>
             <div class="attr-sliders">
                 <div class="attr-item">
-                    <div class="attr-label">🧠 智力</div>
+                    <div class="attr-label">智力</div>
                     <div class="attr-value" id="attr-int">50</div>
                     <div class="attr-controls">
                         <button class="attr-btn" data-stat="int" data-delta="-5">−</button>
@@ -581,7 +449,7 @@
                     </div>
                 </div>
                 <div class="attr-item">
-                    <div class="attr-label">💪 体质</div>
+                    <div class="attr-label">体质</div>
                     <div class="attr-value" id="attr-str">50</div>
                     <div class="attr-controls">
                         <button class="attr-btn" data-stat="str" data-delta="-5">−</button>
@@ -590,7 +458,7 @@
                     </div>
                 </div>
                 <div class="attr-item">
-                    <div class="attr-label">😊 快乐</div>
+                    <div class="attr-label">快乐</div>
                     <div class="attr-value" id="attr-hap">50</div>
                     <div class="attr-controls">
                         <button class="attr-btn" data-stat="hap" data-delta="-5">−</button>
@@ -599,7 +467,7 @@
                     </div>
                 </div>
                 <div class="attr-item">
-                    <div class="attr-label">✨ 颜值</div>
+                    <div class="attr-label">颜值</div>
                     <div class="attr-value" id="attr-cha">50</div>
                     <div class="attr-controls">
                         <button class="attr-btn" data-stat="cha" data-delta="-5">−</button>
@@ -609,7 +477,7 @@
                 </div>
             </div>
             <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
-                <button class="reset-btn" id="resetAttrBtn">⟲ 重置属性</button>
+                
             </div>
         </div>
 
@@ -618,7 +486,7 @@
         <div class="talents-section">
             <div class="section-title">
                 <h2>可选天赋 <span class="selected-count" id="selectedCount">(0/3)</span></h2>
-                <button class="btn" id="rerollBtn" style="padding: 10px 30px; font-size: 1rem;">🔄 重新抽选</button>
+                <button class="btn" id="rerollBtn" style="padding: 10px 30px; font-size: 1rem;">重新抽选</button>
             </div>
             <div class="talents-grid" id="talentsGrid"></div>
         </div>

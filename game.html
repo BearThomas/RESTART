@@ -512,31 +512,31 @@
         <!-- 属性栏 -->
         <div class="stats-bar">
             <div class="stat-item">
-                <div class="stat-label">🧠 智力</div>
+                <div class="stat-label">智力</div>
                 <div class="stat-value" id="stat-int">50</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">💪 体质</div>
+                <div class="stat-label">体质</div>
                 <div class="stat-value" id="stat-str">50</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">😊 快乐</div>
+                <div class="stat-label">快乐</div>
                 <div class="stat-value" id="stat-hap">50</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">✨ 颜值</div>
+                <div class="stat-label">颜值</div>
                 <div class="stat-value" id="stat-cha">50</div>
             </div>
         </div>
 
         <!-- 天数 -->
         <div class="day-info">
-            <span>📅 第 <span id="currentDay">1</span> / 100 天</span>
+            <span>第 <span id="currentDay">1</span> / 100 天</span>
         </div>
 
          <!-- 事件日志 -->
         <div class="event-log" id="eventLog">
-            <div class="log-entry">✨ 游戏开始！祝你度过精彩的龙高时光！</div>
+            <div class="log-entry">游戏开始！祝你度过精彩的龙高时光！</div>
         </div>
 
         <!-- 事件卡片 -->
@@ -761,7 +761,7 @@
                 });
                 
                 // 更新提示
-                document.getElementById('autoHint').textContent = autoMode ? '⏸ 自动暂停，请选择' : '';
+                document.getElementById('autoHint').textContent = autoMode ? '自动暂停，请选择' : '';
             } else {
                 // 无选项：隐藏选项，显示继续按钮
                 optionsDiv.style.display = 'none';
@@ -772,7 +772,7 @@
                 continueBtn.parentNode.replaceChild(newBtn, continueBtn);
                 newBtn.addEventListener('click', () => processNoOptionEvent());
                 
-                document.getElementById('autoHint').textContent = autoMode ? '🔄 自动继续中...' : '';
+                document.getElementById('autoHint').textContent = autoMode ? '自动继续中...' : '';
                 
                 // 自动模式下自动继续
                 if (autoMode && !gameEnded) {
@@ -1105,7 +1105,7 @@
                 updateStatsDisplay();
             }
             
-            addLog(`📌 ${chainEvent.name}`, 'chain');
+            addLog(`${chainEvent.name}`, 'chain');
             
             // 检查连锁事件是否带成就
             if (chainEvent.achievement) {
@@ -1163,7 +1163,7 @@
             if (confirm('确定要清除所有永久成就吗？')) {
                 localStorage.removeItem('longgao_achievements_permanent');
                 gameState.achievements = [];
-                console.log('✅ 永久成就已清除');
+                console.log('永久成就已清除');
                 location.reload();
             }
         }
@@ -1196,19 +1196,19 @@
             let endingDesc = '';
             
             if (totalScore >= 550) {
-                ending = '🎓 深中点招！';
+                ending = '深中点招！';
                 endingDesc = '你的成绩优异，已经被深中提前锁定！';
             } else if (totalScore >= 480) {
-                ending = '📚 重点高中';
+                ending = '重点高中';
                 endingDesc = '你考上了一所不错的重点高中，未来可期！';
             } else if (totalScore >= 400) {
-                ending = '🏫 普通高中';
+                ending = '普通高中';
                 endingDesc = '你考上了一所普通高中，高中生活即将开始。';
             } else if (totalScore >= 300) {
-                ending = '📖 技术学校';
+                ending = '技术学校';
                 endingDesc = '虽然成绩不太理想，但至少还有学上...';
             } else {
-                ending = '😔 名落孙山';
+                ending = '名落孙山';
                 endingDesc = '很遗憾，你没有考上... 或许……';
             }
             
@@ -1368,8 +1368,8 @@
             autoMode = document.getElementById('autoMode').checked;
             
             if (autoMode) {
-                addLog('🔄 自动模式已开启', 'system');
-                document.getElementById('autoHint').textContent = '🔄 自动模式';
+                addLog('自动模式已开启', 'system');
+                document.getElementById('autoHint').textContent = '自动模式';
                 
                 // 检查当前事件是否可以自动继续
                 checkAutoContinue();
@@ -1452,12 +1452,12 @@
             const continueBtn = document.getElementById('continueBtn');
             const newBtn = continueBtn.cloneNode(true);
             continueBtn.parentNode.replaceChild(newBtn, continueBtn);
-            newBtn.textContent = '📝 查看成绩';
+            newBtn.textContent = '查看成绩';
             newBtn.addEventListener('click', () => {
                 endGame();
             });
             
-            addLog('📚 中考开始！祝你好运！', 'exam');
+            addLog('中考开始！祝你好运！', 'exam');
         }
         function goBack() {
             if (confirm('确定要返回吗？当前进度将保存。')) {
@@ -1509,7 +1509,7 @@
         function showAchievementToast(ach) {
             const toast = document.createElement('div');
             toast.className = 'achievement-toast';
-            toast.innerHTML = `<strong>🏆 成就解锁！</strong><br>${ach.name}<br><small>${ach.desc}</small>`;
+            toast.innerHTML = `<strong>成就解锁！</strong><br>${ach.name}<br><small>${ach.desc}</small>`;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
             
@@ -1598,12 +1598,12 @@
 
         // ==================== 评分等级 ====================
         function getScoreRank(score) {
-            if (score >= 1500) return { rank: '🏆 传奇', color: '#c084fc', desc: '你的龙高生涯堪称传奇！' };
-            if (score >= 1200) return { rank: '💎 史诗', color: '#f87171', desc: '你的人生精彩纷呈，令人羡慕！' };
-            if (score >= 1000) return { rank: '⭐ 卓越', color: '#fb923c', desc: '你度过了一段非常充实的时光！' };
-            if (score >= 800) return { rank: '📚 优秀', color: '#60a5fa', desc: '你的高中生活相当不错！' };
-            if (score >= 400) return { rank: '🌱 平凡', color: '#a0a0a0', desc: '平平淡淡才是真。' };
-            return { rank: '😔 遗憾', color: '#888888', desc: '或许有些遗憾，但人生还长...' };
+            if (score >= 2000) return { rank: '传奇', color: '#c084fc', desc: '你的龙高生涯堪称传奇！' };
+            if (score >= 1800) return { rank: '史诗', color: '#f87171', desc: '你的人生精彩纷呈，令人羡慕！' };
+            if (score >= 1600) return { rank: '卓越', color: '#fb923c', desc: '你度过了一段非常充实的时光！' };
+            if (score >= 1400) return { rank: '优秀', color: '#60a5fa', desc: '你的高中生活相当不错！' };
+            if (score >= 1000) return { rank: '平凡', color: '#a0a0a0', desc: '平平淡淡才是真。' };
+            return { rank: '遗憾', color: '#888888', desc: '或许有些遗憾，但人生还长...' };
         }
 
         // ==================== 修改 showEndingPanel ====================
@@ -1629,31 +1629,31 @@
                         <!-- 分数构成（可折叠） -->
                         <details style="cursor:pointer;">
                             <summary style="padding:10px; background:rgba(255,255,255,0.05); border-radius:10px; margin-bottom:10px;">
-                                📈 评分详情
+                                评分详情
                             </summary>
                             <div style="padding:10px; font-size:0.9rem;">
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>📊 属性加权</span>
+                                    <span>属性加权</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.weighted}</span>
                                 </div>
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>⚖️ 均衡奖励</span>
+                                    <span>均衡奖励</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.balance}</span>
                                 </div>
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>🌟 特长奖励</span>
+                                    <span>特长奖励</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.specialty}</span>
                                 </div>
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>🔗 组合加成</span>
+                                    <span>组合加成</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.combo}</span>
                                 </div>
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>🎯 天赋加成</span>
+                                    <span>天赋加成</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.talent}</span>
                                 </div>
                                 <div style="display:flex; justify-content:space-between; padding:5px 0;">
-                                    <span>🏆 成就加成</span>
+                                    <span>成就加成</span>
                                     <span style="color:#a0c4ff;">+${overallData.breakdown.achievement}</span>
                                 </div>
                             </div>
@@ -1662,7 +1662,7 @@
                     
                     <!-- 中考成绩单 -->
                     <div style="background:rgba(0,0,0,0.2); border-radius:16px; padding:20px; margin:20px 0;">
-                        <h3 style="margin-bottom:15px; color:#ffd966;">📊 中考成绩单</h3>
+                        <h3 style="margin-bottom:15px; color:#ffd966;">中考成绩单</h3>
                         <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px 20px;">
                             <div style="display:flex; justify-content:space-between;">
                                 <span>语文</span>
@@ -1700,8 +1700,8 @@
                     </div>
                     
                     <div style="display:flex; gap:15px; justify-content:center;">
-                        <button class="btn btn-primary" onclick="location.reload()">🔄 重新开始</button>
-                        <button class="btn" onclick="window.location.href='index.html'">🏠 返回首页</button>
+                        <button class="btn btn-primary" onclick="location.reload()">重新开始</button>
+                        <button class="btn" onclick="window.location.href='index.html'">返回首页</button>
                     </div>
                     
                     <p style="margin-top:20px; opacity:0.5; font-size:0.8rem;">

@@ -227,19 +227,19 @@
             background: rgba(150, 50, 50, 0.5);
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             .container {
-                padding: 16px;
+                padding: 18px;
             }
 
             .header h1 {
-                font-size: 2.2rem;
+                font-size: 2.4rem;
             }
 
             .stats-summary {
                 flex-wrap: wrap;
-                gap: 12px;
-                padding: 16px;
+                gap: 14px;
+                padding: 18px;
             }
 
             .stat-item {
@@ -249,36 +249,40 @@
             .achievement-card {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 12px;
+                gap: 14px;
             }
 
             .achievement-icon {
-                width: 52px;
-                height: 52px;
-                font-size: 26px;
+                width: 56px;
+                height: 56px;
+                font-size: 28px;
             }
 
             .achievement-name {
-                font-size: 1.15rem;
+                font-size: 1.2rem;
             }
 
             .achievement-desc {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
 
             .back-btn {
-                top: 12px;
-                left: 12px;
+                top: 14px;
+                left: 14px;
                 padding: 8px 14px;
-            }
-
-            .footer {
-                padding: 20px 0;
-                font-size: 0.8rem;
             }
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
+            .container {
+                padding: 14px;
+            }
+
+            .stats-summary {
+                gap: 12px;
+                padding: 14px;
+            }
+
             .stat-item {
                 min-width: 100%;
             }
@@ -287,9 +291,22 @@
                 padding: 18px;
             }
 
+            .achievement-name {
+                font-size: 1.05rem;
+            }
+
+            .achievement-desc {
+                font-size: 0.85rem;
+            }
+
             .achievement-status {
-                font-size: 0.75rem;
+                font-size: 0.78rem;
                 padding: 4px 10px;
+            }
+
+            .footer {
+                padding: 18px 0;
+                font-size: 0.78rem;
             }
         }
     </style>
@@ -302,7 +319,7 @@
 
     <div class="container">
         <div class="header">
-            <h1>🏆 成就殿堂</h1>
+            <h1>成就殿堂</h1>
             <p>记录你在龙高的每一个荣耀时刻</p>
         </div>
 
@@ -328,7 +345,7 @@
         </div>
 
         <div class="footer">
-            <span>✨ 每一个成就都是一段难忘的回忆 ✨</span>
+            <span>每一个成就都是一段难忘的回忆</span>
         </div>
     </div>
 
@@ -385,7 +402,7 @@
                 
                 card.innerHTML = `
                     <div class="achievement-icon">
-                        ${isUnlocked ? '🏆' : '🔒'}
+                        ${isUnlocked ? '' : ''}
                     </div>
                     <div class="achievement-info">
                         <div class="achievement-name">

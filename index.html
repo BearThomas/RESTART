@@ -273,38 +273,122 @@
         }
 
         /* 响应式 */
-        @media (max-width: 600px) {
-            .main-title {
-                font-size: 2.8rem;
-                letter-spacing: 6px;
+        @media (max-width: 900px) {
+            body {
+                overflow-y: auto;
+                min-height: 100vh;
             }
+
+            .game-container {
+                height: auto;
+                min-height: 100vh;
+                padding: 24px 16px 40px;
+                justify-content: flex-start;
+            }
+
+            .title-section {
+                top: 8%;
+                padding: 0 12px;
+            }
+
+            .main-title {
+                font-size: 3.2rem;
+                letter-spacing: 8px;
+                white-space: normal;
+                line-height: 1.05;
+            }
+
             .subtitle {
                 font-size: 1rem;
+                letter-spacing: 4px;
             }
+
+            .main-menu {
+                top: 44%;
+                width: 100%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                gap: 16px;
+                padding: 0 12px;
+            }
+
+            .mode-buttons {
+                width: 100%;
+                max-width: 340px;
+                gap: 14px;
+            }
+
             .mode-btn {
+                width: 100%;
                 padding: 14px 0;
-                font-size: 1.3rem;
-                width: 240px;
+                font-size: 1.2rem;
+                letter-spacing: 4px;
             }
+
+            .bottom-menu-wrapper {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                bottom: 14px;
+                width: calc(100% - 32px);
+                max-width: 680px;
+            }
+
+            .glass-menubar {
+                padding: 10px 14px;
+                max-width: 100%;
+                justify-content: center;
+            }
+
             .menu-buttons {
-                gap: 8px;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
+
             .menu-item {
-                font-size: 0.85rem;
-                padding: 6px 10px;
+                font-size: 0.9rem;
+                padding: 8px 10px;
+                letter-spacing: 1px;
+            }
+
+            .toggle-bar-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+
+            .footer-credit {
+                left: 16px;
+                bottom: 12px;
             }
         }
 
-        @media (max-width: 680px) {
-            .glass-menubar {
-                padding: 8px 12px;
+        @media (max-width: 560px) {
+            .main-title {
+                font-size: 2.4rem;
+                letter-spacing: 4px;
             }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+
+            .mode-btn {
+                font-size: 1.1rem;
+                padding: 12px 0;
+            }
+
+            .glass-menubar {
+                padding: 8px 10px;
+            }
+
             .menu-item {
-                font-size: 0.75rem;
-                padding: 5px 8px;
-                letter-spacing: 1px;
+                flex: 1 1 48%;
+                text-align: center;
             }
         }
+
         /* 版本弹窗样式 */
         .version-modal {
             position: fixed;
@@ -559,22 +643,24 @@
     <div class="version-modal-overlay" onclick="closeVersionModal()"></div>
     <div class="version-modal-content">
         <div class="version-modal-header">
-            <h2>龙高重开模拟器 1.0.0 版本</h2>
+            <h2>龙高重开模拟器 1.0.2 版本</h2>
             <button class="version-modal-close" onclick="closeVersionModal()">&times;</button>
         </div>
         <div class="version-modal-body">
             <div class="version-info">
-                <div class="version-number">v1.0.1</div>
+                <div class="version-number">v1.0.2</div>
                 <div class="version-date">2026-04-17</div>
             </div>
             <div class="version-update">
                 <h3>更新日志</h3>
                 <ul>
-                    <li>修复手机端的显示问题</li>
+                    <li>进一步修复手机端的显示问题</li>
+                    <li>删掉了非常TANG的表情包</li>
+                    <li>修复了一些已知的BUG</li>
                 </ul>
             </div>
             <div class="version-footer">
-                <span>Made with ❤️ by 龙高人</span>
+                <span>Made with ❤️ by 2024-03 XCY</span>
             </div>
         </div>
     </div>
@@ -619,7 +705,7 @@
     </div>
 
     <div class="footer-credit">
-        <span>✦ 星辰流转 · 龙高再启 ✦</span>
+        <span>星辰流转 · 龙高再启</span>
     </div>
 
     <script>
@@ -674,7 +760,7 @@
             // ---------- 星空绘制 (优化性能) ----------
             const canvas = document.getElementById('starfield');
             const ctx = canvas.getContext('2d');
-            const version = "1.0.0";
+            const version = "1.0.2";
 
             let stars = [];
             let animationFrame = null;
