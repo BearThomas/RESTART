@@ -199,8 +199,69 @@
         }
 
         @media (max-width: 800px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 0.95rem;
+            }
+
             .celebrities-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .celebrity-card {
+                padding: 18px;
+            }
+
+            .celebrity-name {
+                font-size: 1.4rem;
+            }
+
+            .celebrity-desc {
+                font-size: 0.9rem;
+            }
+
+            .celebrity-stats {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 14px 0;
+                font-size: 1rem;
+            }
+
+            .back-btn {
+                top: 12px;
+                left: 12px;
+                padding: 8px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+
+            .celebrity-card {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
